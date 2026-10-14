@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Logo } from "../ui/Logo";
@@ -85,19 +87,70 @@ export const Footer: React.FC = () => {
           {/* Company & Methodology Column */}
           <div className="space-y-4">
             <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-bold">
-              Company & Work
+              Engineering & Resources
             </h3>
             <ul className="space-y-2.5 text-sm">
-              {siteConfig.footerLinks.company.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link
+                  href="/estimator"
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors flex items-center gap-1.5"
+                >
+                  <span>Project Estimator</span>
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#19D879]/20 text-[#19D879] font-bold">
+                    NEW
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/insights"
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors"
+                >
+                  Engineering Insights
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/work"
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors"
+                >
+                  Architecture Proofs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors"
+                >
+                  About MZEVOLVE
+                </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("open-deck-modal"));
+                    }
+                  }}
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors text-start cursor-pointer"
+                >
+                  Capabilities Deck (PDF)
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new CustomEvent("open-booking-modal"));
+                    }
+                  }}
+                  className="text-[var(--text-secondary)] hover:text-[#19D879] transition-colors text-start cursor-pointer"
+                >
+                  Schedule Discovery Call
+                </button>
+              </li>
             </ul>
           </div>
 

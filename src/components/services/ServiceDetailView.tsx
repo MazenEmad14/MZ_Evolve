@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ServiceItem } from "@/types";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
+import { InteractiveArchitectureDiagram } from "./InteractiveArchitectureDiagram";
 import {
   Cpu,
   Database,
@@ -139,6 +140,9 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
           ))}
         </div>
       </section>
+
+      {/* Interactive System Architecture Layer */}
+      <InteractiveArchitectureDiagram serviceTitle={service.title} />
 
       {/* Section 3: Deliverables & Tech Stack Grid */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8">

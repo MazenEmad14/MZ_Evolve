@@ -11,6 +11,8 @@ import {
   Lock,
 } from "lucide-react";
 
+import { InteractiveDemonstrations } from "@/components/work/InteractiveDemonstrations";
+
 export const metadata: Metadata = {
   title: "Projects & Demonstrations",
   description:
@@ -56,6 +58,9 @@ export default function WorkPage() {
           </div>
         </div>
       </div>
+
+      {/* Hands-On Interactive Simulators (RAG, Agent State Machine, Token Economics) */}
+      <InteractiveDemonstrations />
 
       {/* Demonstrations List */}
       <div className="space-y-10">

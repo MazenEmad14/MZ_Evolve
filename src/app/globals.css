@@ -109,3 +109,28 @@ select:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* RTL Typography & Alignment */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .font-mono {
+  direction: ltr;
+  display: inline-block;
+}
+
+/* Print styles for Capabilities Deck export */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111413 !important;
+  }
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+}
+

@@ -6,7 +6,7 @@ const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 5;
 
-function isRateLimited(ip: string): boolean {
+function isRateLimitedInMemory(ip: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
 
@@ -28,6 +28,41 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
+// Distributed Rate Limiting via Upstash Redis REST API (when configured), fallback to in-memory
+async function isRateLimited(ip: string): Promise<boolean> {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (redisUrl && redisToken) {
+    try {
+      const key = `mzevolve_rl_${ip}`;
+      const res = await fetch(`${redisUrl}/pipeline`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${redisToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          ["INCR", key],
+          ["EXPIRE", key, 60],
+        ]),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const count = data[0]?.result;
+        if (typeof count === "number" && count > MAX_REQUESTS_PER_WINDOW) {
+          return true;
+        }
+        return false;
+      }
+    } catch {
+      // Fallback to in-memory rate limiter on network exception
+    }
+  }
+
+  return isRateLimitedInMemory(ip);
+}
+
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req: NextRequest) {
@@ -37,7 +72,7 @@ export async function POST(req: NextRequest) {
       req.headers.get("x-real-ip") ||
       "127.0.0.1";
 
-    if (isRateLimited(clientIp)) {
+    if (await isRateLimited(clientIp)) {
       return NextResponse.json(
         {
           success: false,

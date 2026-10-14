@@ -28,7 +28,9 @@ export const siteConfig = {
     whatsappPrefilledUrl:
       "https://wa.me/201069216994?text=Hello%20MZEVOLVE%2C%20I%27d%20like%20to%20discuss%20a%20project.",
     responseTime: "We typically review and respond to inquiries within 1 to 2 business days.",
+    calendarBookingUrl: "https://cal.com/mzevolve/discovery",
   },
+  companyDeckUrl: "/docs/MZEVOLVE-Capabilities-Deck.pdf",
   social: {
     github: "https://github.com/mzevolve",
     linkedin: "https://linkedin.com/company/mzevolve",
@@ -37,8 +39,10 @@ export const siteConfig = {
   navigation: [
     { label: "Home", href: "/" },
     { label: "Services", href: "/services" },
+    { label: "Demonstrations", href: "/work" },
+    { label: "Estimator", href: "/estimator" },
+    { label: "Insights", href: "/insights" },
     { label: "About", href: "/about" },
-    { label: "Work & Proofs", href: "/work" },
     { label: "Contact", href: "/contact" },
   ],
   footerLinks: {

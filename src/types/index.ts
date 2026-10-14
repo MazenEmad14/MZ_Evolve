@@ -62,3 +62,45 @@ export interface ContactSubmissionResult {
   inquiryId?: string;
   errors?: Record<string, string>;
 }
+
+export interface InsightArticle {
+  slug: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  publishedDate: string;
+  readTime: string;
+  author: {
+    name: string;
+    role: string;
+  };
+  summary: string;
+  tags: string[];
+  keyTakeaways: string[];
+  content: {
+    sectionTitle: string;
+    paragraphs: string[];
+    codeBlock?: {
+      language: string;
+      code: string;
+    };
+  }[];
+}
+
+export interface EstimatorOptions {
+  serviceId: string;
+  scale: 'mvp' | 'standard' | 'enterprise';
+  features: string[];
+  timeline: 'rapid' | 'standard' | 'extended';
+  securityTier: 'standard' | 'enterprise_isolated';
+}
+
+export interface EstimatorCalculation {
+  estimatedWeeks: string;
+  suggestedTeam: string;
+  estimatedBudgetBracket: string;
+  architectureTier: string;
+  recommendedStack: string[];
+  scopeSummary: string;
+}
+

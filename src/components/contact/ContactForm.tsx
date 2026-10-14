@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { servicesData } from "@/data/services";
 import { siteConfig } from "@/config/site";
@@ -16,6 +16,7 @@ import {
   Phone,
   MessageSquare,
   ArrowUpRight,
+  Calendar,
 } from "lucide-react";
 
 interface FormState {
@@ -60,8 +61,15 @@ export const ContactForm: React.FC = () => {
   const [copiedId, setCopiedId] = useState(false);
   const [formLoadTime, setFormLoadTime] = useState<number>(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFormLoadTime(Date.now());
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const prefill = params.get("prefill");
+      if (prefill) {
+        setForm((prev) => ({ ...prev, projectDescription: decodeURIComponent(prefill) }));
+      }
+    }
   }, []);
 
   const validate = (): boolean => {
@@ -217,6 +225,14 @@ export const ContactForm: React.FC = () => {
           >
             Submit Another Inquiry
           </Button>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("open-booking-modal"))}
+            className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-[#1E2422] text-[#19D879] border border-[#19D879]/40 hover:bg-[#252D2B] transition-all"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Schedule Discovery Session</span>
+          </button>
           <a
             href={siteConfig.contact.whatsappPrefilledUrl}
             target="_blank"

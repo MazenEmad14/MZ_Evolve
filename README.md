@@ -146,10 +146,19 @@ npm run start
    - E-commerce Solutions (`/services/ecommerce-solutions`)
    - Real Estate Technology (`/services/real-estate-technology`)
    - Education Technology (`/services/education-technology`)
-4. **About Us** (`/about`): Engineering philosophy, core tenets, and corporate governance disclosures.
-5. **Projects / Our Work** (`/work`): Verified technology demonstrations & architectural blueprints, with explicit notices distinguishing internal prototypes from confidential client work.
-6. **Contact** (`/contact`): Interactive project inquiry form with client/server validation, honeypot spam protection, submission speed check, unique inquiry ID generation, and copy-to-clipboard feedback.
-7. **Privacy Policy** (`/privacy`): Full data protection policy covering personal information handling, zero public AI model training guarantees, retention policies, and user rights.
+4. **Project Scope & Effort Estimator** (`/estimator`): Multi-step interactive architectural calculator allowing clients to configure requirements, modules, and timelines to receive instant team recommendations and effort brackets.
+5. **Engineering Insights & Whitepapers** (`/insights`): In-depth technical articles covering enterprise RAG, deterministic vs autonomous agents, and zero-trust LLM security, with full static generation (`/insights/[slug]`).
+6. **About Us** (`/about`): Engineering philosophy, core tenets, and corporate governance disclosures.
+7. **Projects & Demonstrations** (`/work`): Verified technology demonstrations, client confidentiality statement, plus three interactive simulators (RAG Vector Search, Agent State Machine, and Token Economics).
+8. **Contact** (`/contact`): Interactive project inquiry form with client/server validation, honeypot spam protection, submission speed check, unique inquiry ID generation, prefill handshake from estimator, and direct calendar booking.
+9. **Privacy Policy** (`/privacy`): Full data protection policy covering personal information handling, zero public AI model training guarantees, retention policies, and user rights.
+10. **Global Interactive Utilities**:
+    - **Command Palette (`Cmd+K` / `Ctrl+K`)**: Keyboard-accessible spotlight search and action hub.
+    - **Dual-Language & RTL Engine**: Instant toggle between English and Arabic (`العربية`) with dynamic RTL text direction.
+    - **Interactive Architecture Stack Inspector**: 5-layer interactive blueprint embedded in all service detail pages.
+    - **Discovery Session Booking**: Modal trigger integrated with Cal.com / direct scheduling.
+    - **Capabilities Deck Export**: Digital enterprise brochure modal with print-to-PDF formatting.
+
 
 ---
 

@@ -33,6 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/estimator`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/insights`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+    {
       url: `${baseUrl}/contact`,
       lastModified,
       changeFrequency: "monthly",
@@ -54,5 +66,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...servicePages];
+  // Dynamic insights detail pages
+  const insightPages: MetadataRoute.Sitemap = [
+    "architecting-enterprise-rag-low-latency-guardrails",
+    "deterministic-workflows-vs-autonomous-ai-agents",
+    "zero-trust-production-llm-security",
+  ].map((slug) => ({
+    url: `${baseUrl}/insights/${slug}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...servicePages, ...insightPages];
 }

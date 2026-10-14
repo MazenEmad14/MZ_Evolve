@@ -40,7 +40,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <Button
             href="/contact"
             variant="primary"
@@ -49,6 +49,15 @@ export const HeroSection: React.FC = () => {
             className="w-full sm:w-auto"
           >
             Discuss Your Project
+          </Button>
+
+          <Button
+            href="/estimator"
+            variant="secondary"
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            Estimate Scope
           </Button>
 
           <Button

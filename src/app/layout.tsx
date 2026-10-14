@@ -81,6 +81,11 @@ export const metadata: Metadata = {
   },
 };
 
+import { LanguageProvider } from "@/context/LanguageContext";
+import { CommandPalette } from "@/components/ui/CommandPalette";
+import { CalendarBookingModal } from "@/components/ui/CalendarBookingModal";
+import { CapabilitiesDeckModal } from "@/components/ui/CapabilitiesDeckModal";
+
 export default function RootLayout({
   children,
 }: {
@@ -90,12 +95,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={`${fontSans.variable} ${fontHeading.variable}`}>
       <body className="flex flex-col min-h-screen font-sans selection:bg-[#19D879] selection:text-[#111413]">
         <ThemeProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <FloatingWhatsApp />
+          <LanguageProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <FloatingWhatsApp />
+            <CommandPalette />
+            <CalendarBookingModal />
+            <CapabilitiesDeckModal />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
