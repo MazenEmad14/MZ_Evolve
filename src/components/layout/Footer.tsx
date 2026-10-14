@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Logo } from "../ui/Logo";
 import { siteConfig } from "@/config/site";
 import { Mail, Phone, MessageSquare, ArrowUpRight } from "lucide-react";
+import { WhatsAppIcon } from "../ui/WhatsAppIcon";
 
 export const Footer: React.FC = () => {
   const currentYear = 2026;
@@ -51,7 +52,7 @@ export const Footer: React.FC = () => {
 
               {/* Clickable WhatsApp */}
               <div className="flex items-center gap-2.5 text-xs text-[var(--text-secondary)]">
-                <MessageSquare className="w-4 h-4 text-[#19D879] shrink-0" />
+                <WhatsAppIcon className="w-4 h-4 text-[#19D879] shrink-0" />
                 <a
                   href={siteConfig.contact.whatsappPrefilledUrl}
                   target="_blank"

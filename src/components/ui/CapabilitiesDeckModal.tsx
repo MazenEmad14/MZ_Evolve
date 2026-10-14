@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FileText, X, Printer, Shield, CheckCircle, ArrowRight, Mail, Phone } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 export const CapabilitiesDeckModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -136,8 +137,8 @@ export const CapabilitiesDeckModal: React.FC = () => {
                 rel="noopener noreferrer"
                 className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#19D879] hover:bg-[#15b867] text-[#111413] text-xs font-bold transition-colors"
               >
+                <WhatsAppIcon className="w-3.5 h-3.5 text-[#111413]" />
                 <span>Connect on WhatsApp</span>
-                <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>

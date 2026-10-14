@@ -14,13 +14,12 @@ import {
   MessageSquare,
   Moon,
   Sun,
-  Globe,
   ArrowRight,
   Sparkles,
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { useTheme } from "@/components/layout/ThemeProvider";
-import { useLanguage } from "@/context/LanguageContext";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 interface CommandItem {
   id: string;
@@ -40,7 +39,6 @@ export const CommandPalette: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const { theme, toggleTheme } = useTheme();
-  const { language, toggleLanguage, t } = useLanguage();
 
   // Listen for Cmd+K / Ctrl+K and custom event
   useEffect(() => {
@@ -81,74 +79,74 @@ export const CommandPalette: React.FC = () => {
     {
       id: "nav-home",
       category: "Navigation",
-      title: t("nav.home", "Home"),
+      title: "Home",
       subtitle: "Overview & Corporate Mission",
       icon: <Compass className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/");
         setIsOpen(false);
       },
-      keywords: ["home", "main", "start", "landing", "الرئيسية"],
+      keywords: ["home", "main", "start", "landing"],
     },
     {
       id: "nav-services",
       category: "Navigation",
-      title: t("nav.services", "Services"),
+      title: "Services",
       subtitle: "8 Core Engineering Disciplines",
       icon: <Cpu className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/services");
         setIsOpen(false);
       },
-      keywords: ["services", "capabilities", "offerings", "ai", "خدمات"],
+      keywords: ["services", "capabilities", "offerings", "ai"],
     },
     {
       id: "nav-estimator",
       category: "Navigation",
-      title: t("nav.estimator", "Project Scope Estimator"),
+      title: "Project Scope Estimator",
       subtitle: "Interactive Architectural Calculator",
       icon: <Calculator className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/estimator");
         setIsOpen(false);
       },
-      keywords: ["estimator", "calculator", "cost", "pricing", "budget", "scope", "حاسبة"],
+      keywords: ["estimator", "calculator", "cost", "pricing", "budget", "scope"],
     },
     {
       id: "nav-work",
       category: "Navigation",
-      title: t("nav.work", "Demonstrations & Proofs"),
+      title: "Demonstrations & Proofs",
       subtitle: "Interactive Architecture Blueprints",
       icon: <Sparkles className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/work");
         setIsOpen(false);
       },
-      keywords: ["work", "proofs", "blueprints", "demonstrations", "prototypes", "أعمال"],
+      keywords: ["work", "proofs", "blueprints", "demonstrations", "prototypes"],
     },
     {
       id: "nav-insights",
       category: "Navigation",
-      title: t("nav.insights", "Engineering Insights"),
+      title: "Engineering Insights",
       subtitle: "Technical Whitepapers & Articles",
       icon: <BookOpen className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/insights");
         setIsOpen(false);
       },
-      keywords: ["insights", "blog", "articles", "whitepapers", " مقالات", "رؤى"],
+      keywords: ["insights", "blog", "articles", "whitepapers"],
     },
     {
       id: "nav-contact",
       category: "Navigation",
-      title: t("nav.contact", "Contact & Inquiries"),
+      title: "Contact & Inquiries",
       subtitle: "Consult Our Engineering Team",
       icon: <Mail className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/contact");
         setIsOpen(false);
       },
-      keywords: ["contact", "inquiry", "email", "form", "reach", "تواصل"],
+      keywords: ["contact", "inquiry", "email", "form", "reach"],
     },
 
     // Services
@@ -207,12 +205,12 @@ export const CommandPalette: React.FC = () => {
       category: "Actions",
       title: "Start WhatsApp Chat",
       subtitle: siteConfig.contact.whatsappNumber,
-      icon: <MessageSquare className="w-4 h-4 text-[#19D879]" />,
+      icon: <WhatsAppIcon className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         window.open(siteConfig.contact.whatsappPrefilledUrl, "_blank", "noopener,noreferrer");
         setIsOpen(false);
       },
-      keywords: ["whatsapp", "chat", "message", "واتساب"],
+      keywords: ["whatsapp", "chat", "message"],
     },
     {
       id: "act-call",
@@ -224,7 +222,7 @@ export const CommandPalette: React.FC = () => {
         window.location.href = siteConfig.contact.phoneLink;
         setIsOpen(false);
       },
-      keywords: ["phone", "call", "telephone", "اتصال"],
+      keywords: ["phone", "call", "telephone"],
     },
     {
       id: "act-email",
@@ -236,7 +234,7 @@ export const CommandPalette: React.FC = () => {
         window.location.href = siteConfig.contact.emailLink;
         setIsOpen(false);
       },
-      keywords: ["email", "mail", "gmail", "بريد"],
+      keywords: ["email", "mail", "gmail"],
     },
 
     // Preferences
@@ -250,19 +248,7 @@ export const CommandPalette: React.FC = () => {
         toggleTheme();
         setIsOpen(false);
       },
-      keywords: ["theme", "dark", "light", "mode", "color", "سمة"],
-    },
-    {
-      id: "pref-lang",
-      category: "Preferences",
-      title: language === "en" ? "التبديل إلى اللغة العربية" : "Switch to English",
-      subtitle: language === "en" ? "تفعيل واجهة اللغة العربية (RTL)" : "Enable English interface (LTR)",
-      icon: <Globe className="w-4 h-4 text-emerald-400" />,
-      action: () => {
-        toggleLanguage();
-        setIsOpen(false);
-      },
-      keywords: ["language", "arabic", "english", "ترجمة", "عربي"],
+      keywords: ["theme", "dark", "light", "mode", "color"],
     },
   ];
 
@@ -316,7 +302,7 @@ export const CommandPalette: React.FC = () => {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder={t("ui.searchPlaceholder", "Type a command or search...")}
+            placeholder="Type a command or search..."
             className="flex-1 bg-transparent text-sm sm:text-base text-white placeholder-zinc-400 outline-none"
           />
           {query && (

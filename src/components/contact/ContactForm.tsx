@@ -18,6 +18,7 @@ import {
   ArrowUpRight,
   Calendar,
 } from "lucide-react";
+import { WhatsAppIcon } from "../ui/WhatsAppIcon";
 
 interface FormState {
   name: string;
@@ -239,7 +240,7 @@ export const ContactForm: React.FC = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-[#19D879] text-[#111413] hover:bg-[#15b867] transition-all"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
+            <WhatsAppIcon className="w-3.5 h-3.5 text-[#111413]" />
             <span>Follow up on WhatsApp</span>
           </a>
         </div>
@@ -288,7 +289,7 @@ export const ContactForm: React.FC = () => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] text-[var(--text-primary)] hover:text-[#19D879] border border-[var(--border-subtle)]"
             >
-              <MessageSquare className="w-3.5 h-3.5 text-[#19D879]" />
+              <WhatsAppIcon className="w-3.5 h-3.5 text-[#19D879]" />
               <span>WhatsApp</span>
             </a>
             <a

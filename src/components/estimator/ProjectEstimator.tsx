@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { servicesData } from "@/data/services";
+import { WhatsAppIcon } from "../ui/WhatsAppIcon";
 
 export const ProjectEstimator: React.FC = () => {
   const router = useRouter();
@@ -464,7 +465,7 @@ export const ProjectEstimator: React.FC = () => {
                 onClick={handleWhatsAppScope}
                 className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#1E2422] hover:bg-[#252D2B] border border-[#273430] hover:border-[#19D879]/40 text-xs text-zinc-200 font-medium transition-colors"
               >
-                <MessageSquare className="w-4 h-4 text-[#19D879]" />
+                <WhatsAppIcon className="w-4 h-4 text-[#19D879]" />
                 <span>Discuss Scope via WhatsApp</span>
               </button>
             </div>

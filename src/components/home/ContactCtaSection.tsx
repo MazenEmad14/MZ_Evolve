@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "../ui/Button";
 import { siteConfig } from "@/config/site";
 import { ArrowRight, Mail, MessageSquare, Clock, ShieldCheck } from "lucide-react";
+import { WhatsAppIcon } from "../ui/WhatsAppIcon";
 
 export const ContactCtaSection: React.FC = () => {
   return (
@@ -52,7 +53,7 @@ export const ContactCtaSection: React.FC = () => {
                 className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#19D879] px-5 py-3.5 rounded-lg border border-[#19D879]/30 hover:border-[#19D879] hover:bg-[#19D879]/10 transition-all font-mono"
                 title="Chat on WhatsApp"
               >
-                <MessageSquare className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4 text-[#19D879]" />
                 <span>WhatsApp</span>
               </a>
             </div>

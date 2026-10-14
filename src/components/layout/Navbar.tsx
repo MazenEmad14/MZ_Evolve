@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Logo } from "../ui/Logo";
 import { Button } from "../ui/Button";
 import { useTheme } from "./ThemeProvider";
-import { useLanguage } from "@/context/LanguageContext";
 import { siteConfig } from "@/config/site";
 import {
   Menu,
@@ -16,14 +15,12 @@ import {
   ArrowUpRight,
   Sparkles,
   Search,
-  Globe,
   Command,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
-  const { language, toggleLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -89,20 +86,10 @@ export const Navbar: React.FC = () => {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-colors cursor-pointer"
             >
               <Search className="w-3.5 h-3.5 text-[#19D879]" />
-              <span className="hidden lg:inline">{t("nav.cmdK", "Search")}</span>
+              <span className="hidden lg:inline">Search</span>
               <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded text-[var(--text-muted)]">
                 ⌘K
               </kbd>
-            </button>
-
-            {/* Language Toggle */}
-            <button
-              onClick={toggleLanguage}
-              aria-label="Toggle language"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-colors cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#19D879]" />
-              <span>{language === "en" ? "عربي" : "EN"}</span>
             </button>
 
             {/* Theme Toggle Button */}
@@ -129,7 +116,7 @@ export const Navbar: React.FC = () => {
               size="sm"
               rightIcon={<ArrowUpRight className="w-4 h-4" />}
             >
-              {t("nav.quickInquiry", "Start Project")}
+              Start Project
             </Button>
           </div>
 
@@ -141,14 +128,6 @@ export const Navbar: React.FC = () => {
               className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
             >
               <Search className="w-4 h-4 text-[#19D879]" />
-            </button>
-
-            <button
-              onClick={toggleLanguage}
-              aria-label="Toggle language"
-              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
-            >
-              {language === "en" ? "عربي" : "EN"}
             </button>
 
             <button

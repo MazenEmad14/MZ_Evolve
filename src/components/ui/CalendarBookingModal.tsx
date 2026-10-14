@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Calendar, X, ExternalLink, Phone, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { siteConfig } from "@/config/site";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 export const CalendarBookingModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,7 +107,7 @@ export const CalendarBookingModal: React.FC = () => {
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#1E2422] hover:bg-[#252D2B] border border-[#273430] hover:border-[#19D879]/40 text-xs text-zinc-200 font-medium transition-colors"
             >
-              <MessageSquare className="w-4 h-4 text-[#19D879]" />
+              <WhatsAppIcon className="w-4 h-4 text-[#19D879]" />
               <span>WhatsApp Chat</span>
             </a>
             <a

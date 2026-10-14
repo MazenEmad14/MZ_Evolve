@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { Badge } from "@/components/ui/Badge";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { siteConfig } from "@/config/site";
 import {
   Mail,
@@ -86,8 +87,8 @@ export default function ContactPage() {
 
               {/* WhatsApp */}
               <div className="flex items-start gap-3.5">
-                <div className="p-2.5 rounded-xl bg-[var(--bg-surface-elevated)] text-[#19D879] shrink-0">
-                  <MessageSquare className="w-5 h-5" />
+                <div className="p-2.5 rounded-xl bg-[var(--bg-surface-elevated)] text-[#19D879] shrink-0 flex items-center justify-center">
+                  <WhatsAppIcon className="w-5 h-5 text-[#19D879]" />
                 </div>
                 <div>
                   <span className="text-xs font-mono uppercase text-[var(--text-muted)] block">

@@ -110,17 +110,6 @@ select:focus-visible {
   }
 }
 
-/* RTL Typography & Alignment */
-[dir="rtl"] {
-  direction: rtl;
-  text-align: right;
-}
-
-[dir="rtl"] .font-mono {
-  direction: ltr;
-  display: inline-block;
-}
-
 /* Print styles for Capabilities Deck export */
 @media print {
   body {
