@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg-base: #171B1A;
+    --bg-surface: #1E2423;
+    --bg-surface-elevated: #242D2B;
+    --bg-card: rgba(30, 36, 35, 0.7);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(25, 216, 121, 0.25);
+    --text-primary: #F5F7F6;
+    --text-secondary: #A7B6B0;
+    --text-muted: #6E7F78;
+    --brand-emerald: #19D879;
+    --brand-emerald-hover: #15b867;
+    --brand-emerald-glow: rgba(25, 216, 121, 0.15);
+    --accent-glow: radial-gradient(circle at 50% 0%, rgba(25, 216, 121, 0.12) 0%, transparent 60%);
+  }
+
+  html.light {
+    --bg-base: #F5F7F6;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #E9EFEB;
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --border-subtle: rgba(23, 27, 26, 0.1);
+    --border-highlight: rgba(25, 216, 121, 0.35);
+    --text-primary: #171B1A;
+    --text-secondary: #3D4844;
+    --text-muted: #677570;
+    --brand-emerald: #0ea85c;
+    --brand-emerald-hover: #0b8a4b;
+    --brand-emerald-glow: rgba(14, 168, 92, 0.12);
+    --accent-glow: radial-gradient(circle at 50% 0%, rgba(25, 216, 121, 0.08) 0%, transparent 60%);
   }
 }
 
+@theme {
+  --color-brand-emerald: var(--brand-emerald);
+  --color-brand-charcoal: #171B1A;
+  --color-brand-offwhite: #F5F7F6;
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-elevated: var(--bg-surface-elevated);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  min-height: 100vh;
+}
+
+/* Glassmorphism and ambient glow utilities */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-highlight);
+}
+
+.emerald-glow-sm {
+  box-shadow: 0 0 20px -5px rgba(25, 216, 121, 0.3);
+}
+
+.emerald-glow-md {
+  box-shadow: 0 0 35px -5px rgba(25, 216, 121, 0.35);
+}
+
+.subtle-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+html.light .subtle-grid {
+  background-image: 
+    linear-gradient(to right, rgba(23, 27, 26, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 27, 26, 0.04) 1px, transparent 1px);
+}
+
+/* Accessible focus styling */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--brand-emerald);
+  outline-offset: 3px;
+}
+
+/* Smooth motion handling */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
