@@ -1,9 +1,11 @@
 export const siteConfig = {
   name: "MZEVOLVE",
-  legalName: "MZEVOLVE Technology Group [Corporate Registration Pending]",
+  legalName: "MZEVOLVE",
   tagline: "Beyond Ordinary. Built to Evolve.",
-  shortDescription: "Engineering enterprise-grade AI solutions, intelligent agent workflows, and scalable digital architectures built to evolve with your business.",
-  fullDescription: "MZEVOLVE is a modern technology and AI engineering consultancy. We design and deploy high-performance LLM applications, autonomous agent workflows, enterprise RAG systems, and resilient web platforms engineered for longevity and evolution.",
+  shortDescription:
+    "Engineering modern AI solutions, intelligent agent workflows, and scalable digital architectures built to evolve with your business.",
+  fullDescription:
+    "MZEVOLVE is a modern technology and AI engineering consultancy. We design and build practical AI integrations, workflow automations, knowledge assistants, and modern web applications engineered for business value and longevity.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://mzevolve.com",
   ogImage: "/images/og-mzevolve.png",
   brandColors: {
@@ -15,11 +17,17 @@ export const siteConfig = {
     surfaceBorder: "#273430",
   },
   contact: {
-    officialEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "contact@mzevolve.com",
-    inquiriesEmail: process.env.NEXT_PUBLIC_INQUIRIES_EMAIL || "projects@mzevolve.com",
-    phonePlaceholder: "[Direct consultations scheduled upon project acceptance]",
-    locationPlaceholder: "[Global Operations / Engineering Headquarters: Remote & Regional Consultations]",
-    responseTime: "Guaranteed initial technical assessment within 1 to 2 business days",
+    email: "mzevolve2026@gmail.com",
+    emailLink: "mailto:mzevolve2026@gmail.com",
+    phone: "01069216994",
+    phoneInternational: "+201069216994",
+    phoneDisplayFormatted: "+20 106 921 6994",
+    phoneLink: "tel:+201069216994",
+    whatsappNumber: "+201069216994",
+    whatsappUrl: "https://wa.me/201069216994",
+    whatsappPrefilledUrl:
+      "https://wa.me/201069216994?text=Hello%20MZEVOLVE%2C%20I%27d%20like%20to%20discuss%20a%20project.",
+    responseTime: "We typically review and respond to inquiries within 1 to 2 business days.",
   },
   social: {
     github: "https://github.com/mzevolve",
@@ -53,8 +61,6 @@ export const siteConfig = {
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Engagement", href: "/privacy#terms" },
-      { label: "Data Protection & Security", href: "/privacy#data-security" },
     ],
   },
   metadata: {
@@ -62,15 +68,15 @@ export const siteConfig = {
       "MZEVOLVE",
       "AI Solutions",
       "LLM Applications",
-      "Enterprise RAG",
+      "Knowledge Assistants",
       "AI Agents",
       "Workflow Automation",
       "Next.js Development",
       "Predictive Analytics",
       "Data Science",
-      "E-commerce AI",
-      "PropTech",
-      "EdTech",
+      "E-commerce Solutions",
+      "Real Estate Technology",
+      "Education Technology",
     ],
   },
 };

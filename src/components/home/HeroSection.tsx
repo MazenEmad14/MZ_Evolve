@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
-import { ArrowRight, Terminal, Cpu, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Terminal, Cpu, ShieldCheck } from "lucide-react";
 
 export const HeroSection: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ export const HeroSection: React.FC = () => {
         {/* Availability Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-secondary)] shadow-sm">
           <span className="w-2 h-2 rounded-full bg-[#19D879] animate-pulse" />
-          <span>Accepting Select Enterprise & Startup Engineering Engagements</span>
+          <span>Accepting New Project & Engineering Inquiries</span>
         </div>
 
         {/* Primary Headline */}
@@ -35,7 +35,7 @@ export const HeroSection: React.FC = () => {
           </h1>
 
           <p className="max-w-2xl mx-auto text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed font-normal">
-            We engineer production-grade AI solutions, enterprise RAG pipelines, autonomous agent workflows, and scalable web architectures built to adapt and perform.
+            We engineer practical AI solutions, knowledge assistants, workflow automations, and modern web applications built to adapt and perform.
           </p>
         </div>
 
@@ -67,15 +67,15 @@ export const HeroSection: React.FC = () => {
             <Cpu className="w-5 h-5 text-[#19D879] shrink-0" />
             <div>
               <div className="text-xs font-mono text-[var(--text-muted)] uppercase">Architecture</div>
-              <div className="text-sm font-semibold text-[var(--text-primary)]">Deterministic AI Systems</div>
+              <div className="text-sm font-semibold text-[var(--text-primary)]">Practical AI Integration</div>
             </div>
           </div>
 
           <div className="flex items-center justify-center gap-3 text-left">
             <ShieldCheck className="w-5 h-5 text-[#19D879] shrink-0" />
             <div>
-              <div className="text-xs font-mono text-[var(--text-muted)] uppercase">Security</div>
-              <div className="text-sm font-semibold text-[var(--text-primary)]">Private VPC & Zero Leakage</div>
+              <div className="text-xs font-mono text-[var(--text-muted)] uppercase">Confidentiality</div>
+              <div className="text-sm font-semibold text-[var(--text-primary)]">Secure & Confidential</div>
             </div>
           </div>
 

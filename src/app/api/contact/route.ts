@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 
-// Simple in-memory rate limiting map for basic spam protection
+// In-memory rate limiting map for basic protection against local request flooding
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 const MAX_REQUESTS_PER_WINDOW = 5;
@@ -47,7 +47,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json();
+    let body: Record<string, unknown>;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid request payload. Please submit a valid JSON request.",
+        },
+        { status: 400 }
+      );
+    }
+
     const {
       name,
       email,
@@ -62,35 +74,36 @@ export async function POST(req: NextRequest) {
     } = body;
 
     // 1. Honeypot check - automated bots fill hidden fields
-    if (honeypot && honeypot.trim() !== "") {
-      // Silently accept to fool the bot without doing processing
+    if (typeof honeypot === "string" && honeypot.trim() !== "") {
+      // Silently accept to fool automated bots without processing
       return NextResponse.json({
         success: true,
+        deliveryStatus: "bot_deflected",
         message: "Your inquiry has been received.",
-        inquiryId: `INQ-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
+        inquiryId: `MZ-${Math.random().toString(36).substring(2, 9).toUpperCase()}`,
       });
     }
 
     // 2. Submission speed check (bots submit instantaneously)
-    if (timestamp && Date.now() - Number(timestamp) < 800) {
+    if (timestamp && typeof timestamp === "number" && Date.now() - timestamp < 800) {
       return NextResponse.json(
         {
           success: false,
-          message: "Submission was too fast. Please verify you are human.",
+          message: "Submission was unusually fast. Please verify your inputs and try again.",
         },
         { status: 400 }
       );
     }
 
-    // 3. Server-side Field Validations
+    // 3. Field Validations
     const errors: Record<string, string> = {};
 
     if (!name || typeof name !== "string" || name.trim().length < 2) {
-      errors.name = "Please provide your name (at least 2 characters).";
+      errors.name = "Please provide your full name (at least 2 characters).";
     }
 
     if (!email || typeof email !== "string" || !EMAIL_REGEX.test(email.trim())) {
-      errors.email = "Please provide a valid business email address.";
+      errors.email = "Please provide a valid email address.";
     }
 
     if (
@@ -107,18 +120,18 @@ export async function POST(req: NextRequest) {
       projectDescription.trim().length < 20
     ) {
       errors.projectDescription =
-        "Please provide a brief project description (at least 20 characters).";
+        "Please provide a project description (at least 20 characters).";
     }
 
     if (!privacyConsent) {
-      errors.privacyConsent = "You must agree to the privacy consent to submit an inquiry.";
+      errors.privacyConsent = "Please acknowledge the privacy consent to proceed.";
     }
 
     if (Object.keys(errors).length > 0) {
       return NextResponse.json(
         {
           success: false,
-          message: "Validation failed. Please correct the highlighted errors.",
+          message: "Validation failed. Please correct the highlighted fields.",
           errors,
         },
         { status: 400 }
@@ -131,71 +144,135 @@ export async function POST(req: NextRequest) {
       .substring(2, 6)
       .toUpperCase()}`;
 
-    // Sanitized record for delivery
+    // Sanitized record
     const sanitizedInquiry = {
       inquiryId,
       submittedAt: new Date().toISOString(),
-      name: name.trim().slice(0, 100),
-      email: email.trim().toLowerCase().slice(0, 150),
+      name: String(name).trim().slice(0, 100),
+      email: String(email).trim().toLowerCase().slice(0, 150),
       company: company ? String(company).trim().slice(0, 100) : "Not Specified",
       serviceInterest: String(serviceInterest).trim().slice(0, 100),
       timeline: timeline ? String(timeline).trim().slice(0, 50) : "Not Specified",
       budgetRange: budgetRange ? String(budgetRange).trim().slice(0, 50) : "Not Specified",
-      projectDescription: projectDescription.trim().slice(0, 3000),
-      ipHash: clientIp ? `mask-${clientIp.substring(0, 4)}...` : "unknown",
-      destinationEmail: siteConfig.contact.officialEmail,
+      projectDescription: String(projectDescription).trim().slice(0, 3000),
     };
 
-    // Log the validated inquiry for enterprise audit
-    console.log(
-      `[MZEVOLVE INQUIRY RECEIVED] [${inquiryId}] From: ${sanitizedInquiry.email} | Service: ${sanitizedInquiry.serviceInterest}`
-    );
-
-    // Optional integration: If RESEND_API_KEY is configured in production, dispatch email
+    // Check email delivery configuration
     const resendApiKey = process.env.RESEND_API_KEY;
+    const isDevelopment =
+      process.env.NODE_ENV === "development" ||
+      process.env.ALLOW_SIMULATED_SUBMISSIONS === "true";
+
+    // 4. Handle Email Delivery
     if (resendApiKey) {
       try {
-        await fetch("https://api.resend.com/emails", {
+        const fromEmail =
+          process.env.RESEND_FROM_EMAIL || "MZEVOLVE Inquiries <onboarding@resend.dev>";
+        const toEmail = siteConfig.contact.email; // mzevolve2026@gmail.com
+
+        const emailResponse = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${resendApiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            from: "MZEVOLVE Inquiries <noreply@mzevolve.com>",
-            to: [siteConfig.contact.officialEmail],
+            from: fromEmail,
+            to: [toEmail],
+            reply_to: sanitizedInquiry.email,
             subject: `[New Inquiry ${inquiryId}] ${sanitizedInquiry.serviceInterest} from ${sanitizedInquiry.name}`,
-            text: `New Inquiry Reference: ${inquiryId}
-Name: ${sanitizedInquiry.name}
-Email: ${sanitizedInquiry.email}
-Company: ${sanitizedInquiry.company}
-Service: ${sanitizedInquiry.serviceInterest}
-Timeline: ${sanitizedInquiry.timeline}
-Budget: ${sanitizedInquiry.budgetRange}
+            text: `MZEVOLVE Inbound Project Inquiry
+Reference ID: ${inquiryId}
+Submitted: ${sanitizedInquiry.submittedAt}
 
-Description:
+Contact Details:
+- Name: ${sanitizedInquiry.name}
+- Email: ${sanitizedInquiry.email}
+- Company: ${sanitizedInquiry.company}
+
+Project Scope:
+- Primary Service: ${sanitizedInquiry.serviceInterest}
+- Estimated Timeline: ${sanitizedInquiry.timeline}
+- Estimated Budget: ${sanitizedInquiry.budgetRange}
+
+Project Description:
 ${sanitizedInquiry.projectDescription}
-            `,
+`,
           }),
         });
-      } catch (emailErr) {
-        console.error("Optional email dispatch notice:", emailErr);
-        // Do not fail user request if external mail provider is offline
+
+        if (!emailResponse.ok) {
+          const errDetail = await emailResponse.text();
+          console.error(`[MZEVOLVE INQUIRY ERROR] Resend dispatch failed (status ${emailResponse.status})`);
+          return NextResponse.json(
+            {
+              success: false,
+              deliveryStatus: "provider_error",
+              message: `Automated email forwarding encountered a temporary issue. Please reach out to us directly at ${siteConfig.contact.email} or WhatsApp at ${siteConfig.contact.whatsappNumber}.`,
+            },
+            { status: 502 }
+          );
+        }
+
+        // Successfully delivered via Resend
+        console.log(`[MZEVOLVE INQUIRY DELIVERED] ID: ${inquiryId} | Service: ${sanitizedInquiry.serviceInterest}`);
+        return NextResponse.json({
+          success: true,
+          inquiryId,
+          deliveryStatus: "delivered",
+          message:
+            "Thank you. Your inquiry has been confirmed and delivered to our team. We will review your brief and reply via email within 1 to 2 business days.",
+        });
+      } catch (networkErr) {
+        console.error("[MZEVOLVE INQUIRY ERROR] Network error connecting to mail provider");
+        return NextResponse.json(
+          {
+            success: false,
+            deliveryStatus: "network_error",
+            message: `Could not reach the email delivery provider. Please reach out to us directly at ${siteConfig.contact.email} or WhatsApp at ${siteConfig.contact.whatsappNumber}.`,
+          },
+          { status: 502 }
+        );
       }
     }
 
-    return NextResponse.json({
-      success: true,
-      inquiryId,
-      message:
-        "Thank you. Your inquiry has been validated and recorded. An MZEVOLVE engineer will review your brief within 1–2 business days.",
-    });
-  } catch (error) {
-    console.error("Error processing inquiry:", error);
+    // If Resend is NOT configured:
+    // In local development or simulation mode:
+    if (isDevelopment) {
+      console.log(`[MZEVOLVE INQUIRY DEV SIMULATION] ID: ${inquiryId} | Service: ${sanitizedInquiry.serviceInterest}`);
+      return NextResponse.json({
+        success: true,
+        inquiryId,
+        deliveryStatus: "simulated_dev",
+        message:
+          "Your inquiry was successfully validated in development mode. In production, set RESEND_API_KEY in your environment to enable automated email forwarding to " +
+          siteConfig.contact.email +
+          ".",
+      });
+    }
+
+    // In production without an active email provider:
+    // Do not falsely report delivery. Show an honest, user-friendly message directing to direct channels.
+    console.warn(`[MZEVOLVE INQUIRY UNCONFIGURED] Submission received but RESEND_API_KEY is not set.`);
     return NextResponse.json(
       {
         success: false,
-        message: "An internal server error occurred. Please contact us directly at " + siteConfig.contact.officialEmail,
+        deliveryStatus: "unconfigured_in_production",
+        message: `Automated online form dispatch is currently awaiting configuration. Please send your project details directly to ${siteConfig.contact.email} or contact us via WhatsApp at ${siteConfig.contact.whatsappNumber}.`,
+      },
+      { status: 503 }
+    );
+  } catch (error) {
+    console.error("[MZEVOLVE INQUIRY ERROR] Unexpected server error occurred");
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "An unexpected server error occurred. Please contact us directly at " +
+          siteConfig.contact.email +
+          " or WhatsApp at " +
+          siteConfig.contact.whatsappNumber +
+          ".",
       },
       { status: 500 }
     );

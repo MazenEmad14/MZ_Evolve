@@ -17,7 +17,6 @@ import {
   ArrowLeft,
   Layers,
   Sparkles,
-  Shield,
   Code2,
 } from "lucide-react";
 
@@ -73,7 +72,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
             <div className="w-14 h-14 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[#19D879]/30 flex items-center justify-center text-[#19D879]">
               <IconComponent className="w-7 h-7" />
             </div>
-            <Badge variant="emerald">ENGINEERING DISCIPLINE</Badge>
+            <Badge variant="emerald">SERVICE OVERVIEW</Badge>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[var(--text-primary)] tracking-tight leading-[1.1]">
@@ -95,7 +94,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
               size="lg"
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Consult On This Discipline
+              Discuss This Service
             </Button>
 
             <Button
@@ -103,7 +102,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
               variant="secondary"
               size="lg"
             >
-              Explore Capabilities
+              View Capabilities
             </Button>
           </div>
         </div>
@@ -112,12 +111,12 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
       {/* Section 2: Key Capabilities */}
       <section id="capabilities" className="space-y-10">
         <div className="space-y-3">
-          <Badge variant="emerald">CORE COMPETENCIES</Badge>
+          <Badge variant="emerald">CORE CAPABILITIES</Badge>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)]">
-            Architectural Capabilities
+            How We Deliver Value
           </h2>
           <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl">
-            Our approach is built around deep technical rigor, strict schema guarantees, and cost-predictable infrastructure.
+            Practical technical capabilities designed to solve operational challenges with reliable performance.
           </p>
         </div>
 
@@ -148,7 +147,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
           <div className="flex items-center gap-2">
             <Layers className="w-5 h-5 text-[#19D879]" />
             <h3 className="text-lg font-bold text-[var(--text-primary)]">
-              Concrete Engineering Deliverables
+              Project Deliverables
             </h3>
           </div>
 
@@ -170,7 +169,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
           {/* Ideal For */}
           <div className="p-8 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-4">
             <h3 className="text-base font-bold text-[var(--text-primary)]">
-              Who This Is Engineered For
+              Ideal Scenarios & Use Cases
             </h3>
             <ul className="space-y-2.5">
               {service.idealFor.map((item, idx) => (
@@ -190,7 +189,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
             <div className="flex items-center gap-2">
               <Code2 className="w-4 h-4 text-[#19D879]" />
               <h3 className="text-base font-bold text-[var(--text-primary)]">
-                Preferred Technology Stack
+                Technologies & Tools
               </h3>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -210,10 +209,10 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service })
       {/* Call to Action Banner */}
       <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#18221E] to-[#141817] border border-[#19D879]/40 text-center space-y-6">
         <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-          Ready to implement {service.title}?
+          Interested in {service.title}?
         </h3>
         <p className="text-sm sm:text-base text-[#B0C0B9] max-w-xl mx-auto">
-          We provide clear feasibility feedback, architectural roadmaps, and fixed-scope delivery milestones.
+          We evaluate your project requirements, assess technical feasibility, and provide clear milestones for implementation.
         </p>
         <Button
           href={`/contact?service=${encodeURIComponent(service.title)}`}

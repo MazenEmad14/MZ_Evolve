@@ -16,8 +16,8 @@ export const PrinciplesSection: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           badgeText="ENGINEERING VALUES"
-          title="Principles That Guide Every Line of Code"
-          subtitle="Our engineering standards are non-negotiable. We build reliable, auditable, and long-lasting software without relying on fleeting industry hype."
+          title="Principles That Guide Every Project"
+          subtitle="Core standards that guide our technical recommendations, client communications, and codebase architecture."
           align="center"
         />
 
@@ -48,7 +48,7 @@ export const PrinciplesSection: React.FC = () => {
 
                 <div className="pt-4 border-t border-[var(--border-subtle)] flex items-center gap-2 text-xs font-mono text-[var(--text-muted)]">
                   <CheckCircle2 className="w-3.5 h-3.5 text-[#19D879]" />
-                  <span>Verified Standard</span>
+                  <span>Guiding Principle</span>
                 </div>
               </div>
             );

@@ -1,70 +1,56 @@
 # MZEVOLVE Official Website — Executive Approval Checklist
 
-In strict adherence to the project brief's content rules:
+In strict adherence to the project brief's content and governance rules:
 - **No clients, testimonials, awards, metrics, case studies, company history, certifications, or guarantees have been fabricated.**
-- **Missing or pending corporate data points have been marked with explicit configuration placeholders.**
+- **All official contact channels are centralized in `src/config/site.ts` as the single source of truth.**
 - **Demonstration projects are explicitly distinguished from confidential client work.**
 
-Before publishing the website to the public domain `mzevolve.com`, the executive leadership of MZEVOLVE should review and approve the following configuration and content items.
+Before publishing the website to public production hosting (`mzevolve.com`), review the confirmed settings and take action on the remaining business and infrastructure items below.
 
 ---
 
-## 1. Corporate Identity & Legal Disclosures
+## 1. Confirmed & Integrated Official Corporate Details
 
-| Configuration Item | Current Placeholder / Default | Action Required for Approval | Location in Code |
-| :--- | :--- | :--- | :--- |
-| **Legal Entity Name** | `MZEVOLVE Technology Group [Corporate Registration Pending]` | Provide official registered business name (LLC, Inc., Corp., or Ltd.). | `src/config/site.ts` (`siteConfig.legalName`) |
-| **Corporate Registration / Tax ID** | Pending verification | Supply commercial registration number, jurisdiction, or tax identifier if required by local regulations. | `src/app/privacy/page.tsx` |
-| **Registered Headquarters Address** | `[Global Operations / Engineering Headquarters: Remote & Regional Consultations]` | Provide official physical or registered legal address for corporate filings and footer display. | `src/config/site.ts` (`siteConfig.contact.locationPlaceholder`) |
-| **Corporate Telephone Channel** | `[Direct consultations scheduled upon project acceptance]` | Provide primary corporate telephone line or confirm consultation-only policy. | `src/config/site.ts` (`siteConfig.contact.phonePlaceholder`) |
+The following official information has been verified, implemented, and wired across all components:
 
----
-
-## 2. Communications & Email Routing Infrastructure
-
-| Configuration Item | Current Default | Action Required for Approval | Location in Code |
-| :--- | :--- | :--- | :--- |
-| **Official Contact Email** | `contact@mzevolve.com` | Ensure MX / Google Workspace / Microsoft 365 records are active for this address. | `src/config/site.ts` (`siteConfig.contact.officialEmail`) |
-| **Inquiries Intake Email** | `projects@mzevolve.com` | Verify that inbound notifications are routed to the proper engineering triage inbox. | `src/config/site.ts` (`siteConfig.contact.inquiriesEmail`) |
-| **Transactional Email Dispatch Key** | `RESEND_API_KEY` (in `.env.example`) | Provision production API key (e.g. from Resend.com or AWS SES) to forward contact submissions automatically. | `.env.example` / Production Hosting Environment Variables |
-
----
-
-## 3. Social Media & External Channels
-
-| Channel | Current Default URL | Action Required for Approval | Location in Code |
-| :--- | :--- | :--- | :--- |
-| **GitHub Organization** | `https://github.com/mzevolve` | Create or link official corporate GitHub organization. | `src/config/site.ts` (`siteConfig.social.github`) |
-| **LinkedIn Company Page** | `https://linkedin.com/company/mzevolve` | Create or link official corporate LinkedIn page. | `src/config/site.ts` (`siteConfig.social.linkedin`) |
-| **X / Twitter Profile** | `https://x.com/mzevolve` | Create or link official corporate X handle. | `src/config/site.ts` (`siteConfig.social.x`) |
-
----
-
-## 4. Client Work & Case Studies Authorization
-
-| Item | Current Status | Action Required for Approval |
+| Item | Confirmed Value | Implementation Status |
 | :--- | :--- | :--- |
-| **Demonstrations vs. Client Work** | 4 verified internal technology demonstrations are displayed (`/work`). Zero client case studies are fabricated. | Once formal written client clearance / NDAs allow, add client case studies into `src/data/caseStudies.ts` or approve keeping demonstration-only focus. |
-| **Testimonials & Metrics** | Zero fabricated testimonials or unverified statistics are present. | Approve policy to only publish verified, signed client testimonials when authorized. |
+| **Company Name** | `MZEVOLVE` | Configured centrally in `src/config/site.ts` (`siteConfig.name`). Unverified suffixes like "Technology Group" have been removed. |
+| **Brand Tagline** | `Beyond Ordinary. Built to Evolve.` | Displayed in hero, navigation, metadata, and footer. |
+| **Official Email** | `mzevolve2026@gmail.com` | Configured as clickable `mailto:mzevolve2026@gmail.com` in navbar, footer, contact page, about page, and API recipient. |
+| **Official Phone** | `01069216994` (Dialing: `+201069216994`) | Configured as clickable `tel:+201069216994` across all components; formatted for Egyptian and international callers. |
+| **WhatsApp Direct Channel** | `+201069216994` (`https://wa.me/201069216994`) | Active via Floating WhatsApp widget, footer link, contact page card, and error fallback buttons. |
+| **Brand Palette** | Emerald `#19D879`, Charcoal `#171B1A`, Off-White `#F5F7F6` | Enforced throughout Tailwind design system and CSS tokens. |
+| **Approved Services** | 8 specific disciplines | Grounded descriptions in `src/data/services.ts`, free from unverified claims or buzzwords. |
 
 ---
 
-## 5. Legal Counsel Review of Privacy Policy
+## 2. Infrastructure & External Services Requiring Owner Configuration
 
-| Document | Current Coverage | Action Required for Approval | Location |
+| Configuration Item | Status / Default | Action Required from Owner | Location in Code / Env |
 | :--- | :--- | :--- | :--- |
-| **Privacy Policy** | GDPR, CCPA, zero AI training guarantees, retention schedules, and user rights requests. | Review by legal counsel to ensure compliance with specific operating jurisdictions. | `src/app/privacy/page.tsx` |
-| **Terms of Service** | Reference link to standard contractual proposals and engagement terms. | Supply standard Master Services Agreement (MSA) template or terms if required online. | `src/app/privacy/page.tsx` |
+| **Production Email Dispatch (`RESEND_API_KEY`)** | Currently empty (`""`) | Create a free account at [Resend.com](https://resend.com), generate an API key, and set `RESEND_API_KEY` in production hosting environment variables. *Note: If not configured, the website gracefully falls back to directing users to email `mzevolve2026@gmail.com` or WhatsApp directly.* | `.env.example` / Hosting Dashboard |
+| **Sender Email Address (`RESEND_FROM_EMAIL`)** | Defaults to `MZEVOLVE Inquiries <onboarding@resend.dev>` | Verify your custom domain in Resend to send from `inquiries@mzevolve.com`, or leave default for initial testing. | `.env.example` / `src/app/api/contact/route.ts` |
+| **Production Domain & DNS** | Configured as `https://mzevolve.com` | Configure your DNS provider with A / CNAME records pointing to your hosting provider (Vercel, Docker, etc.) as detailed in `DEPLOYMENT.md`. | DNS Provider / `NEXT_PUBLIC_SITE_URL` |
 
 ---
 
-## Sign-Off Protocol
+## 3. Business & Legal Items for Owner Review
+
+| Item | Current Implementation | Action Required from Owner |
+| :--- | :--- | :--- |
+| **Corporate Registration / Tax ID** | Kept unstated to avoid publishing unverified legal claims. | Provide official commercial registration number or tax ID if mandatory in your operating jurisdiction. |
+| **Physical Office Address** | Intentionally omitted. MZEVOLVE operates modern remote and client-site engineering. | If a formal commercial headquarters lease is established, add it to `siteConfig.contact.location`. |
+| **Social Media Profiles** | Linked to standard corporate placeholders (`github.com/mzevolve`, `linkedin.com/company/mzevolve`, `x.com/mzevolve`). | Provide live URLs once official corporate social accounts are created, or disable icons if not yet active. |
+| **Privacy Policy Review** | Grounded to exact site behavior: zero ad tracking, localStorage theme preference, contact form processing, user data rights. | Have corporate legal counsel review `src/app/privacy/page.tsx` for your specific regional operational scope. |
+| **Client Case Studies Authorization** | 4 honest internal technology demonstrations displayed (`/work`). Zero client case studies are fabricated. | When signed enterprise NDAs and client clearances permit, supply verified case studies for addition to the site. |
+
+---
+
+## 4. Pre-Launch Sign-Off Protocol
 
 Once the items above have been completed:
-1. Update `src/config/site.ts` with approved values.
-2. Commit changes to version control:
-   ```bash
-   git add src/config/site.ts
-   git commit -m "chore: apply approved corporate details and legal entities"
-   ```
-3. Trigger production deployment following `DEPLOYMENT.md`.
+1. Supply `RESEND_API_KEY` to production hosting environment variables.
+2. Verify DNS propagation for `mzevolve.com`.
+3. Submit a live test inquiry via `/contact` and confirm reception in `mzevolve2026@gmail.com`.
+4. Test WhatsApp floating button on both desktop and mobile screens.

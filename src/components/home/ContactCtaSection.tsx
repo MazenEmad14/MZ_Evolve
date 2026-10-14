@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../ui/Button";
 import { siteConfig } from "@/config/site";
-import { ArrowRight, Mail, Clock, ShieldCheck } from "lucide-react";
+import { ArrowRight, Mail, MessageSquare, Clock, ShieldCheck } from "lucide-react";
 
 export const ContactCtaSection: React.FC = () => {
   return (
@@ -15,47 +15,59 @@ export const ContactCtaSection: React.FC = () => {
           <div className="relative z-10 max-w-3xl space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#19D879]/10 border border-[#19D879]/30 text-xs font-mono text-[#19D879]">
               <Clock className="w-3.5 h-3.5" />
-              <span>RAPID TECHNICAL ASSESSMENT</span>
+              <span>DIRECT TECHNICAL CONSULTATION</span>
             </div>
 
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
-              Ready to engineer systems that are built to evolve?
+              Ready to build systems that are built to evolve?
             </h2>
 
             <p className="text-base sm:text-lg text-[#C2CFC9] leading-relaxed max-w-2xl">
-              Whether you are architecting a high-throughput RAG assistant, autonomous agent loop, or modern web platform, our team evaluates technical feasibility and delivers actionable engineering proposals.
+              Whether you need to integrate generative AI models, automate internal workflows, or build a fast modern web application, our team is ready to discuss your requirements.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4">
               <Button
                 href="/contact"
                 variant="primary"
                 size="lg"
                 rightIcon={<ArrowRight className="w-5 h-5" />}
               >
-                Start Your Project Inquiry
+                Send a Project Brief
               </Button>
 
               <a
-                href={`mailto:${siteConfig.contact.officialEmail}`}
-                className="inline-flex items-center justify-center gap-2 text-sm font-medium text-white px-5 py-3 rounded-lg border border-white/15 hover:border-[#19D879] hover:bg-white/5 transition-all"
+                href={siteConfig.contact.emailLink}
+                className="inline-flex items-center justify-center gap-2 text-sm font-medium text-white px-5 py-3.5 rounded-lg border border-white/15 hover:border-[#19D879] hover:bg-white/5 transition-all"
+                title="Send email to MZEVOLVE"
               >
                 <Mail className="w-4 h-4 text-[#19D879]" />
-                <span className="font-mono">{siteConfig.contact.officialEmail}</span>
+                <span className="font-mono">{siteConfig.contact.email}</span>
+              </a>
+
+              <a
+                href={siteConfig.contact.whatsappPrefilledUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 text-sm font-medium text-[#19D879] px-5 py-3.5 rounded-lg border border-[#19D879]/30 hover:border-[#19D879] hover:bg-[#19D879]/10 transition-all font-mono"
+                title="Chat on WhatsApp"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>WhatsApp</span>
               </a>
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-wrap items-center gap-6 text-xs text-[#9EADA7]">
               <div className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-[#19D879]" />
-                <span>NDA & Confidentiality Respected</span>
+                <span>Confidential Discussions</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-[#19D879]" />
-                <span>Response within 24–48 hours</span>
+                <span>{siteConfig.contact.responseTime}</span>
               </div>
               <div className="flex items-center gap-1.5 font-mono">
-                <span>0 Vendor Lock-In</span>
+                <span>Direct Contact: {siteConfig.contact.phone}</span>
               </div>
             </div>
           </div>

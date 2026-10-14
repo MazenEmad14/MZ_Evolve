@@ -172,10 +172,19 @@ export const Navbar: React.FC = () => {
             >
               Start a Project
             </Button>
-            <div className="text-center pt-2">
-              <span className="text-xs text-[var(--text-muted)] font-mono">
-                {siteConfig.contact.officialEmail}
-              </span>
+            <div className="text-center pt-2 space-y-1">
+              <a
+                href={siteConfig.contact.emailLink}
+                className="text-xs text-[var(--text-secondary)] hover:text-[#19D879] font-mono block"
+              >
+                {siteConfig.contact.email}
+              </a>
+              <a
+                href={siteConfig.contact.phoneLink}
+                className="text-xs text-[var(--text-muted)] hover:text-[#19D879] font-mono block"
+              >
+                Tel: {siteConfig.contact.phone}
+              </a>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { servicesData } from "@/data/services";
+import { siteConfig } from "@/config/site";
 import { Button } from "../ui/Button";
 import {
   CheckCircle2,
@@ -11,8 +12,10 @@ import {
   Check,
   Send,
   Lock,
-  Clock,
-  Sparkles,
+  Mail,
+  Phone,
+  MessageSquare,
+  ArrowUpRight,
 } from "lucide-react";
 
 interface FormState {
@@ -52,6 +55,7 @@ export const ContactForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
   const [submittedInquiryId, setSubmittedInquiryId] = useState<string>("");
+  const [deliveryNote, setDeliveryNote] = useState<string>("");
   const [serverError, setServerError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState(false);
   const [formLoadTime, setFormLoadTime] = useState<number>(0);
@@ -82,7 +86,7 @@ export const ContactForm: React.FC = () => {
     }
 
     if (!form.privacyConsent) {
-      newErrors.privacyConsent = "You must agree to the privacy policy to submit an inquiry.";
+      newErrors.privacyConsent = "Please acknowledge the privacy consent to submit an inquiry.";
     }
 
     setErrors(newErrors);
@@ -113,15 +117,21 @@ export const ContactForm: React.FC = () => {
 
       if (response.ok && data.success) {
         setSubmissionSuccess(true);
-        setSubmittedInquiryId(data.inquiryId);
+        setSubmittedInquiryId(data.inquiryId || `MZ-${Date.now().toString(36).toUpperCase()}`);
+        setDeliveryNote(data.message || "Your inquiry has been received by our engineering team.");
       } else {
-        setServerError(data.message || "Failed to submit inquiry. Please try again.");
+        setServerError(
+          data.message ||
+            `Unable to submit inquiry at this moment. Please email ${siteConfig.contact.email} or contact us via WhatsApp.`
+        );
         if (data.errors) {
           setErrors(data.errors);
         }
       }
-    } catch (err) {
-      setServerError("Network error. Please check your connection or email contact@mzevolve.com directly.");
+    } catch {
+      setServerError(
+        `Network error. Please check your connection or reach us directly at ${siteConfig.contact.email} or via WhatsApp.`
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -144,10 +154,10 @@ export const ContactForm: React.FC = () => {
 
         <div className="space-y-2">
           <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">
-            Inquiry Successfully Delivered
+            Inquiry Confirmed
           </h3>
           <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
-            Thank you for reaching out to MZEVOLVE. Your project brief has been recorded in our engineering queue.
+            {deliveryNote}
           </p>
         </div>
 
@@ -165,6 +175,7 @@ export const ContactForm: React.FC = () => {
             onClick={copyToClipboard}
             className="p-2 rounded-lg bg-[var(--bg-surface)] hover:bg-[#19D879]/20 text-[var(--text-secondary)] hover:text-[#19D879] border border-[var(--border-subtle)] transition-colors cursor-pointer"
             title="Copy reference ID"
+            aria-label="Copy reference ID"
           >
             {copiedId ? <Check className="w-4 h-4 text-[#19D879]" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -172,12 +183,20 @@ export const ContactForm: React.FC = () => {
 
         <div className="pt-2 text-xs text-[var(--text-muted)] space-y-1">
           <p>
-            An MZEVOLVE engineer will review your specifications and reply via email within 1–2 business days.
+            An MZEVOLVE team member will review your specifications and reply via email within 1–2 business days.
           </p>
-          <p className="font-mono">Direct follow-ups: contact@mzevolve.com</p>
+          <p className="font-mono">
+            Direct follow-ups:{" "}
+            <a
+              href={siteConfig.contact.emailLink}
+              className="text-[#19D879] hover:underline"
+            >
+              {siteConfig.contact.email}
+            </a>
+          </p>
         </div>
 
-        <div className="pt-4">
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button
             onClick={() => {
               setSubmissionSuccess(false);
@@ -196,8 +215,17 @@ export const ContactForm: React.FC = () => {
             variant="secondary"
             size="sm"
           >
-            Submit Another Project Brief
+            Submit Another Inquiry
           </Button>
+          <a
+            href={siteConfig.contact.whatsappPrefilledUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg bg-[#19D879] text-[#111413] hover:bg-[#15b867] transition-all"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Follow up on WhatsApp</span>
+          </a>
         </div>
       </div>
     );
@@ -224,9 +252,37 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {serverError && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3 text-xs sm:text-sm text-red-400">
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-          <span>{serverError}</span>
+        <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+          <div className="flex items-start gap-3 text-xs sm:text-sm text-amber-300">
+            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-amber-400" />
+            <span>{serverError}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-amber-500/20 text-xs">
+            <span className="text-[var(--text-muted)] font-mono">Immediate Channels:</span>
+            <a
+              href={siteConfig.contact.emailLink}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] text-[var(--text-primary)] hover:text-[#19D879] border border-[var(--border-subtle)]"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#19D879]" />
+              <span>Email Us</span>
+            </a>
+            <a
+              href={siteConfig.contact.whatsappPrefilledUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] text-[var(--text-primary)] hover:text-[#19D879] border border-[var(--border-subtle)]"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-[#19D879]" />
+              <span>WhatsApp</span>
+            </a>
+            <a
+              href={siteConfig.contact.phoneLink}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--bg-surface)] text-[var(--text-primary)] hover:text-[#19D879] border border-[var(--border-subtle)]"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#19D879]" />
+              <span>Call Us</span>
+            </a>
+          </div>
         </div>
       )}
 
@@ -260,7 +316,7 @@ export const ContactForm: React.FC = () => {
             htmlFor="email"
             className="block text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-semibold"
           >
-            Business Email <span className="text-[#19D879]">*</span>
+            Email Address <span className="text-[#19D879]">*</span>
           </label>
           <input
             type="email"
@@ -268,7 +324,7 @@ export const ContactForm: React.FC = () => {
             required
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            placeholder="alex@enterprise.com"
+            placeholder="alex@example.com"
             className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-elevated)] border text-[var(--text-primary)] placeholder-[var(--text-muted)] text-sm transition-colors ${
               errors.email ? "border-red-500" : "border-[var(--border-subtle)]"
             }`}
@@ -293,7 +349,7 @@ export const ContactForm: React.FC = () => {
             id="company"
             value={form.company}
             onChange={(e) => setForm({ ...form, company: e.target.value })}
-            placeholder="Acme Technologies Ltd"
+            placeholder="Company name"
             className="w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder-[var(--text-muted)] text-sm transition-colors"
           />
         </div>
@@ -320,11 +376,8 @@ export const ContactForm: React.FC = () => {
                 {s.title}
               </option>
             ))}
-            <option value="Cross-Disciplinary AI Transformation">
-              Cross-Disciplinary AI Transformation
-            </option>
-            <option value="General Architecture Advisory">
-              General Architecture Advisory
+            <option value="General Technical Advisory">
+              General Technical Advisory
             </option>
           </select>
           {errors.serviceInterest && (
@@ -370,11 +423,12 @@ export const ContactForm: React.FC = () => {
             className="w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm transition-colors"
           >
             <option value="">Select budget range...</option>
-            <option value="$10,000 – $25,000">$10,000 – $25,000 (Initial Prototype)</option>
-            <option value="$25,000 – $50,000">$25,000 – $50,000 (Production System)</option>
-            <option value="$50,000 – $100,000+">$50,000 – $100,000+ (Enterprise Architecture)</option>
-            <option value="To be determined after architectural scoping">
-              To be determined after architectural scoping
+            <option value="Under $10,000">Under $10,000</option>
+            <option value="$10,000 – $25,000">$10,000 – $25,000</option>
+            <option value="$25,000 – $50,000">$25,000 – $50,000</option>
+            <option value="$50,000+">$50,000+</option>
+            <option value="To be determined after scoping">
+              To be determined after scoping
             </option>
           </select>
         </div>
@@ -387,7 +441,7 @@ export const ContactForm: React.FC = () => {
             htmlFor="projectDescription"
             className="block text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-semibold"
           >
-            Project Goals & Technical Requirements <span className="text-[#19D879]">*</span>
+            Project Goals & Description <span className="text-[#19D879]">*</span>
           </label>
           <span className="text-xs font-mono text-[var(--text-muted)]">
             {form.projectDescription.length} chars (min 20)
@@ -399,7 +453,7 @@ export const ContactForm: React.FC = () => {
           required
           value={form.projectDescription}
           onChange={(e) => setForm({ ...form, projectDescription: e.target.value })}
-          placeholder="Please describe your current systems, specific operational bottlenecks, desired outcomes, or technical constraints..."
+          placeholder="Please describe your current systems, operational goals, or technical requirements..."
           className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-elevated)] border text-[var(--text-primary)] placeholder-[var(--text-muted)] text-sm transition-colors resize-y ${
             errors.projectDescription ? "border-red-500" : "border-[var(--border-subtle)]"
           }`}
@@ -419,11 +473,11 @@ export const ContactForm: React.FC = () => {
             className="mt-1 w-4 h-4 rounded border-[var(--border-subtle)] text-[#19D879] focus:ring-[#19D879] bg-[var(--bg-surface-elevated)] cursor-pointer"
           />
           <span className="text-xs text-[var(--text-secondary)] leading-relaxed">
-            I consent to MZEVOLVE storing and processing the provided project information solely for the purpose of evaluating and responding to this technical inquiry, as detailed in the{" "}
+            I consent to MZEVOLVE storing and using the submitted contact and project information solely to evaluate and respond to this inquiry, as outlined in the{" "}
             <Link href="/privacy" className="text-[#19D879] underline hover:text-[#15b867]">
               Privacy Policy
             </Link>
-            . Your data is never sold or used for public AI model training.
+            .
           </span>
         </label>
         {errors.privacyConsent && (
@@ -435,7 +489,7 @@ export const ContactForm: React.FC = () => {
       <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[var(--border-subtle)]">
         <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
           <Lock className="w-3.5 h-3.5 text-[#19D879]" />
-          <span>Encrypted Submission & Zero Spam</span>
+          <span>Direct & Confidential Submission</span>
         </div>
 
         <Button

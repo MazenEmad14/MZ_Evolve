@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { siteConfig } from "@/config/site";
 
 const fontSans = Plus_Jakarta_Sans({
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.shortDescription,
   keywords: siteConfig.metadata.keywords,
-  authors: [{ name: "MZEVOLVE Engineering Group" }],
+  authors: [{ name: "MZEVOLVE" }],
   creator: "MZEVOLVE",
   publisher: "MZEVOLVE",
   formatDetection: {
@@ -92,6 +93,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <FloatingWhatsApp />
         </ThemeProvider>
       </body>
     </html>

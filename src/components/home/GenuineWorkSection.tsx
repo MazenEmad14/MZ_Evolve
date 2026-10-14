@@ -4,27 +4,27 @@ import { demonstrationsData } from "@/data/demonstrations";
 import { SectionHeading } from "../ui/SectionHeading";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
-import { Code, ExternalLink, ShieldAlert, ArrowRight, CheckCircle } from "lucide-react";
+import { ShieldCheck, ArrowRight, CheckCircle } from "lucide-react";
 
 export const GenuineWorkSection: React.FC = () => {
   return (
     <section id="proofs" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
-          badgeText="TECHNOLOGY PROOFS & DEMOS"
-          title="Architectural Blueprints & Working Prototypes"
-          subtitle="We test and validate architectural patterns through genuine internal prototypes. Below are technical demonstrations engineered by MZEVOLVE."
+          badgeText="TECHNOLOGY DEMONSTRATIONS"
+          title="Verified Prototypes & Blueprints"
+          subtitle="We test and validate software patterns through working internal prototypes. Below are technical demonstrations engineered by MZEVOLVE."
           align="center"
         />
 
         {/* Client Discretion Notice */}
         <div className="max-w-3xl mx-auto mb-12 p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-start gap-3 text-xs text-[var(--text-secondary)]">
-          <ShieldAlert className="w-4 h-4 text-[#19D879] shrink-0 mt-0.5" />
+          <ShieldCheck className="w-4 h-4 text-[#19D879] shrink-0 mt-0.5" />
           <div>
             <span className="font-semibold text-[var(--text-primary)]">
-              Client Confidentiality Notice:
+              Client Confidentiality Policy:
             </span>{" "}
-            In accordance with strict enterprise NDAs, proprietary client production codebases are not displayed publicly. Public case studies are released only upon formal written clearance. The systems below represent verified internal technical demonstrations.
+            We treat client projects with strict professional discretion and do not publish private client codebases or unverified case studies. The systems below represent verified internal demonstrations and technical proofs.
           </div>
         </div>
 
@@ -55,7 +55,7 @@ export const GenuineWorkSection: React.FC = () => {
 
                 <div className="space-y-2 pt-2">
                   <span className="text-[11px] font-mono uppercase text-[var(--text-muted)] block tracking-wider">
-                    Key Architectural Capabilities
+                    Demonstrated Capabilities
                   </span>
                   <ul className="space-y-1.5">
                     {demo.highlights.slice(0, 3).map((item, i) => (
@@ -82,13 +82,13 @@ export const GenuineWorkSection: React.FC = () => {
 
                 <div className="flex items-center justify-between pt-1">
                   <span className="text-[10px] font-mono text-[var(--text-muted)]">
-                    MZEVOLVE INTERNAL PROOF
+                    MZEVOLVE DEMONSTRATION
                   </span>
                   <Link
                     href="/work"
                     className="text-xs font-semibold text-[#19D879] hover:underline inline-flex items-center gap-1"
                   >
-                    <span>View Specifications</span>
+                    <span>View Details</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -104,7 +104,7 @@ export const GenuineWorkSection: React.FC = () => {
             size="md"
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
-            Explore All Demonstration Specifications
+            Explore All Demonstrations
           </Button>
         </div>
       </div>

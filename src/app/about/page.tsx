@@ -14,16 +14,16 @@ import {
   ArrowRight,
   Terminal,
   Cpu,
-  CheckCircle,
-  Building2,
   Mail,
-  MapPin,
+  Phone,
+  MessageSquare,
+  Building,
 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about MZEVOLVE: our engineering philosophy, commitment to deterministic AI systems, and mission to build software that is built to evolve.",
+    "Learn about MZEVOLVE: our engineering philosophy, practical approach to software and AI integration, and commitment to clear client communication.",
 };
 
 const iconMap: Record<string, React.FC<{ className?: string }>> = {
@@ -45,44 +45,44 @@ export default function AboutPage() {
           <span className="text-[#19D879]">Built to Evolve.</span>
         </h1>
         <p className="text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-          MZEVOLVE is an advanced technology engineering group focused on bridging the divide between experimental generative AI models and mission-critical production software.
+          MZEVOLVE is a modern technology and software engineering consultancy focused on building practical, dependable AI integrations and web applications.
         </p>
       </div>
 
       {/* Narrative Section */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         <div className="lg:col-span-7 space-y-6">
-          <Badge variant="charcoal">THE PHILOSOPHY</Badge>
+          <Badge variant="charcoal">OUR APPROACH</Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[var(--text-primary)]">
-            Why We Specialize in Evolutionary Software
+            Practical Engineering for Real Business Challenges
           </h2>
           <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-            The software industry is undergoing an unprecedented architectural shift. Traditional static software engineering is colliding with probabilistic neural models. When teams attempt to combine these paradigms using superficial wrapper scripts, systems fail in production due to context rot, high token latency, and hallucinations.
+            As artificial intelligence technologies evolve, many organizations find it challenging to separate marketing buzz from practical tools that genuinely improve business operations.
           </p>
           <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-            At MZEVOLVE, we approach engineering with a disciplined dual focus: rigorous deterministic software engineering principles combined with modern cognitive architectures. We design decoupled layers where inference models can be hot-swapped or fine-tuned without requiring complete application rewrites.
+            At MZEVOLVE, we focus on pragmatic engineering. We design clean software architectures where language models, automation workflows, and web interfaces work harmoniously within clearly defined business boundaries.
           </p>
           <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-            Our commitment is simple: no fabricated metrics, no speculative hype, and absolute transparency in every technical recommendation we deliver.
+            Our commitment is grounded in clear communication, transparent deliverables, and software built to adapt as technology advances.
           </p>
         </div>
 
         <div className="lg:col-span-5 p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-6 shadow-xl">
           <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#19D879]">
             <Terminal className="w-4 h-4" />
-            <span>Core Tenets</span>
+            <span>Guiding Tenets</span>
           </div>
 
           <div className="space-y-4">
             <div className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] space-y-1">
               <span className="text-xs font-mono text-[#19D879] uppercase block font-semibold">
-                01. Beyond Ordinary
+                01. Purposeful Solutions
               </span>
               <p className="text-sm font-semibold text-[var(--text-primary)]">
-                Zero Boilerplate Wrappers
+                Problem-First Focus
               </p>
               <p className="text-xs text-[var(--text-secondary)]">
-                Every system is purpose-built to address domain-specific constraints, cost profiles, and edge-cases.
+                We select technologies that directly address your business needs, avoiding unnecessary complexity.
               </p>
             </div>
 
@@ -91,22 +91,22 @@ export default function AboutPage() {
                 02. Built to Evolve
               </span>
               <p className="text-sm font-semibold text-[var(--text-primary)]">
-                Modular Decoupled Abstractions
+                Adaptable Architecture
               </p>
               <p className="text-xs text-[var(--text-secondary)]">
-                Inference models, vector indices, and tool runtimes are treated as modular components, not monolithic dependencies.
+                Applications are structured modularly so individual components can be updated without rebuilding the entire system.
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-[var(--bg-surface-elevated)] space-y-1">
               <span className="text-xs font-mono text-[#19D879] uppercase block font-semibold">
-                03. Data Sovereignty
+                03. Client Codebase Ownership
               </span>
               <p className="text-sm font-semibold text-[var(--text-primary)]">
-                Zero Leakage & Private Endpoints
+                Full Transparency
               </p>
               <p className="text-xs text-[var(--text-secondary)]">
-                Customer data and proprietary IP remain strictly within isolated client VPCs and zero-retention API boundaries.
+                Clients receive full access to their source code, build scripts, and documentation upon project completion.
               </p>
             </div>
           </div>
@@ -116,9 +116,9 @@ export default function AboutPage() {
       {/* Principles Section */}
       <section className="space-y-12">
         <SectionHeading
-          badgeText="HOW WE THINK"
-          title="Our Non-Negotiable Engineering Standards"
-          subtitle="We hold ourselves to transparent, auditable software standards that prioritize your company's long-term autonomy."
+          badgeText="HOW WE WORK"
+          title="Engineering Standards We Uphold"
+          subtitle="Clear boundaries, verifiable milestones, and honest technical guidance on every project."
           align="center"
         />
 
@@ -148,53 +148,66 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Corporate Information & Governance Notice */}
+      {/* Verified Corporate Contact Points */}
       <section className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-6">
         <div className="flex items-center gap-2 text-xs font-mono text-[#19D879] uppercase tracking-wider">
-          <Building2 className="w-4 h-4" />
-          <span>Corporate Governance & Transparency</span>
+          <Building className="w-4 h-4" />
+          <span>Official Company Contacts</span>
         </div>
 
         <h3 className="text-2xl font-bold text-[var(--text-primary)]">
-          Company Status & Verified Points of Contact
+          Direct Channels of Communication
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          {/* Company Name */}
           <div className="p-5 rounded-2xl bg-[var(--bg-surface-elevated)] space-y-2">
             <span className="text-xs font-mono text-[var(--text-muted)] uppercase block">
-              Legal Registration
+              Company
             </span>
-            <p className="font-semibold text-[var(--text-primary)]">
-              {siteConfig.legalName}
+            <p className="font-semibold text-[var(--text-primary)] text-lg">
+              {siteConfig.name}
             </p>
             <p className="text-xs text-[var(--text-muted)]">
-              Formal corporate disclosures and tax jurisdiction information are provided alongside contractual proposals.
+              {siteConfig.tagline}
             </p>
           </div>
 
+          {/* Email */}
           <div className="p-5 rounded-2xl bg-[var(--bg-surface-elevated)] space-y-2">
             <span className="text-xs font-mono text-[var(--text-muted)] uppercase block">
               Official Email
             </span>
             <p className="font-semibold text-[#19D879] font-mono">
-              <a href={`mailto:${siteConfig.contact.officialEmail}`} className="hover:underline">
-                {siteConfig.contact.officialEmail}
+              <a href={siteConfig.contact.emailLink} className="hover:underline">
+                {siteConfig.contact.email}
               </a>
             </p>
             <p className="text-xs text-[var(--text-muted)]">
-              Primary verified channel for all executive and engineering communications.
+              Direct inbox for technical inquiries and project briefs.
             </p>
           </div>
 
+          {/* Phone & WhatsApp */}
           <div className="p-5 rounded-2xl bg-[var(--bg-surface-elevated)] space-y-2">
             <span className="text-xs font-mono text-[var(--text-muted)] uppercase block">
-              Global Operations
+              Phone & WhatsApp
             </span>
-            <p className="font-semibold text-[var(--text-primary)]">
-              Remote-First Engineering Squads
+            <p className="font-semibold text-[var(--text-primary)] font-mono">
+              <a href={siteConfig.contact.phoneLink} className="hover:text-[#19D879]">
+                {siteConfig.contact.phone}
+              </a>
             </p>
-            <p className="text-xs text-[var(--text-muted)]">
-              Regional technical meetings and on-site architecture workshops arranged upon project qualification.
+            <p className="text-xs text-[#19D879]">
+              <a
+                href={siteConfig.contact.whatsappPrefilledUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center gap-1 font-mono"
+              >
+                <span>WhatsApp: {siteConfig.contact.whatsappNumber}</span>
+                <ArrowRight className="w-3 h-3" />
+              </a>
             </p>
           </div>
         </div>
@@ -208,7 +221,7 @@ export default function AboutPage() {
           size="lg"
           rightIcon={<ArrowRight className="w-5 h-5" />}
         >
-          Schedule an Architecture Consultation
+          Discuss Your Project With Us
         </Button>
       </div>
     </div>

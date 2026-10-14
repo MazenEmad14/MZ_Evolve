@@ -38,10 +38,11 @@ Vercel provides native edge caching, automatic SSL, and zero-configuration Next.
 
 ### Step 3: Set Environment Variables
 In the Vercel project settings under **Environment Variables**, add:
-- `NEXT_PUBLIC_SITE_URL`: `https://mzevolve.com`
-- `NEXT_PUBLIC_CONTACT_EMAIL`: `contact@mzevolve.com`
-- `NEXT_PUBLIC_INQUIRIES_EMAIL`: `projects@mzevolve.com`
-- `RESEND_API_KEY`: *(Your production Resend API Key for automated inquiry forwarding)*
+- `NEXT_PUBLIC_SITE_URL`: `https://mzevolve.com` (or your staging/preview URL)
+- `NEXT_PUBLIC_CONTACT_EMAIL`: `mzevolve2026@gmail.com`
+- `NEXT_PUBLIC_INQUIRIES_EMAIL`: `mzevolve2026@gmail.com`
+- `RESEND_API_KEY`: *(Optional in dev, required in production for automated email forwarding to `mzevolve2026@gmail.com`)*
+- `RESEND_FROM_EMAIL`: `MZEVOLVE Inquiries <onboarding@resend.dev>` (or custom verified domain sender)
 
 ### Step 4: Configure Custom Domain & DNS
 1. Navigate to **Project Settings > Domains**.
@@ -96,7 +97,8 @@ CMD ["npm", "run", "start"]
 docker build -t mzevolve-web .
 docker run -d -p 3000:3000 --name mzevolve-prod --restart always \
   -e NEXT_PUBLIC_SITE_URL="https://mzevolve.com" \
-  -e NEXT_PUBLIC_CONTACT_EMAIL="contact@mzevolve.com" \
+  -e NEXT_PUBLIC_CONTACT_EMAIL="mzevolve2026@gmail.com" \
+  -e RESEND_API_KEY="your-resend-key-here" \
   mzevolve-web
 ```
 
@@ -143,5 +145,10 @@ Upon deploying to production:
 4. Submit a test inquiry on `/contact` and confirm:
    - Client-side validation catches empty fields.
    - Server-side validation assigns a unique inquiry ID (e.g. `MZ-XXXXXXXX`).
-   - Notification email arrives at `contact@mzevolve.com`.
-5. Check `https://mzevolve.com/robots.txt` and `https://mzevolve.com/sitemap.xml`.
+   - If `RESEND_API_KEY` is configured, notification email arrives at `mzevolve2026@gmail.com`.
+   - If email is not yet configured, form gracefully provides honest fallback directing client to `mzevolve2026@gmail.com` or WhatsApp.
+5. Verify Clickable Channels:
+   - All email links open `mailto:mzevolve2026@gmail.com`.
+   - Phone link triggers dialing `tel:+201069216994` (displayed as `01069216994`).
+   - WhatsApp buttons and floating widget open `https://wa.me/201069216994`.
+6. Check `https://mzevolve.com/robots.txt` and `https://mzevolve.com/sitemap.xml`.

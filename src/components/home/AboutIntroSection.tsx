@@ -1,8 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { SectionHeading } from "../ui/SectionHeading";
 import { Button } from "../ui/Button";
-import { ArrowUpRight, CheckCircle2, Layers, Zap, RefreshCw } from "lucide-react";
+import { ArrowUpRight, Layers, Zap, RefreshCw } from "lucide-react";
 
 export const AboutIntroSection: React.FC = () => {
   return (
@@ -16,15 +15,15 @@ export const AboutIntroSection: React.FC = () => {
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--text-primary)] leading-tight">
-              Moving beyond fragile AI wrappers into resilient, production software.
+              Moving beyond basic AI wrappers into practical, dependable software.
             </h2>
 
             <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              MZEVOLVE was conceived to solve a critical industry paradox: while foundation AI models advance at breathtaking speed, most commercial implementations remain fragile prototypes plagued by hallucinations, unpredictable latency, and vendor lock-in.
+              While foundation AI models advance rapidly, many commercial implementations remain fragile prototypes plagued by inconsistent responses and high ongoing maintenance.
             </p>
 
             <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              We approach artificial intelligence and modern web engineering with an evolutionary mindset. We engineer modular abstractions, deterministic verification gates, and enterprise-grade infrastructure designed to adapt continuously as new technologies emerge.
+              We approach artificial intelligence and modern web engineering with an evolutionary mindset. We engineer modular code, structured validation, and dependable web applications designed to adapt gracefully as new tools and models emerge.
             </p>
 
             <div className="pt-2">
@@ -58,7 +57,7 @@ export const AboutIntroSection: React.FC = () => {
                       Modular Architecture
                     </h4>
                     <p className="text-xs text-[var(--text-secondary)] mt-0.5 leading-relaxed">
-                      Decoupled layers allowing models, vector databases, and tools to swap dynamically.
+                      Decoupled layers allowing models, databases, and APIs to update cleanly.
                     </p>
                   </div>
                 </div>
@@ -69,10 +68,10 @@ export const AboutIntroSection: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-sm font-bold text-[var(--text-primary)]">
-                      Deterministic Precision
+                      Structured Validation
                     </h4>
                     <p className="text-xs text-[var(--text-secondary)] mt-0.5 leading-relaxed">
-                      Strict schema validation, automated evals, and audit-ready citation provenance.
+                      Strict schema validation, response quality tests, and verifiable source references.
                     </p>
                   </div>
                 </div>

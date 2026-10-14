@@ -4,15 +4,10 @@ import Link from "next/link";
 import { demonstrationsData } from "@/data/demonstrations";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import {
-  ShieldAlert,
-  Code2,
+  ShieldCheck,
   CheckCircle2,
   ArrowRight,
-  Terminal,
-  Cpu,
-  Layers,
   Lock,
 } from "lucide-react";
 
@@ -27,36 +22,36 @@ export default function WorkPage() {
     <div className="pt-28 pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
       {/* Header */}
       <div className="max-w-4xl mx-auto text-center space-y-4">
-        <Badge variant="emerald">VERIFIED ARCHITECTURE</Badge>
+        <Badge variant="emerald">PROTOTYPES & PROOFS</Badge>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--text-primary)]">
-          Technology Demonstrations & Proofs
+          Technology Demonstrations & Prototypes
         </h1>
         <p className="text-base sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-          We believe in proving architectural hypotheses before proposing them for production. Below are verified prototypes and technical demonstrations designed by MZEVOLVE.
+          We believe in proving architectural patterns through functional prototypes before proposing them for production. Below are verified internal demonstrations built by MZEVOLVE.
         </p>
       </div>
 
       {/* Transparency & Confidentiality Policy Banner */}
       <div className="p-6 sm:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[#19D879]/30 space-y-4">
         <div className="flex items-center gap-2.5 text-xs font-mono uppercase tracking-wider text-[#19D879] font-bold">
-          <ShieldAlert className="w-4 h-4" />
-          <span>Strict Client Non-Disclosure Policy</span>
+          <ShieldCheck className="w-4 h-4" />
+          <span>Client Confidentiality Policy</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-[var(--text-secondary)]">
           <div className="space-y-2">
             <h4 className="font-bold text-[var(--text-primary)]">
-              Client Production Deployments
+              Client Engagements
             </h4>
             <p className="leading-relaxed text-xs sm:text-sm">
-              We execute non-disclosure agreements with our commercial partners. Proprietary models, business datasets, and private client repositories are strictly protected. We do not invent fictional case studies or unverified testimonials.
+              We maintain strict confidentiality regarding all client projects, business logic, and private repositories. We do not publish fictional case studies or unverified client testimonials.
             </p>
           </div>
           <div className="space-y-2">
             <h4 className="font-bold text-[var(--text-primary)]">
-              Demonstration Systems & Prototypes
+              Demonstration Systems
             </h4>
             <p className="leading-relaxed text-xs sm:text-sm">
-              The projects listed below are internal technology demonstrations engineered by MZEVOLVE to benchmark latency, validate prompt chains, and stress-test data pipelines under controlled conditions.
+              The projects featured below are internal prototypes and technical demonstrations built by MZEVOLVE to test and illustrate software capabilities under controlled scenarios.
             </p>
           </div>
         </div>
@@ -98,7 +93,7 @@ export default function WorkPage() {
                 </p>
 
                 <h3 className="text-sm font-mono uppercase tracking-wider text-[var(--text-muted)] font-semibold pt-2">
-                  Architecture & Engineering Specifications
+                  Architecture & Specifications
                 </h3>
                 <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
                   {demo.architectureDetails}
@@ -107,7 +102,7 @@ export default function WorkPage() {
 
               <div className="lg:col-span-5 p-6 rounded-2xl bg-[var(--bg-surface-elevated)] space-y-4">
                 <span className="text-xs font-mono uppercase tracking-wider text-[#19D879] block font-semibold">
-                  Verified Benchmarks & Capabilities
+                  Demonstrated Capabilities
                 </span>
                 <ul className="space-y-2.5">
                   {demo.highlights.map((h, i) => (
@@ -148,13 +143,13 @@ export default function WorkPage() {
         ))}
       </div>
 
-      {/* Bottom NDA Consultation CTA */}
+      {/* Bottom Consultation CTA */}
       <div className="p-8 sm:p-12 rounded-3xl bg-[var(--bg-surface)] border border-[#19D879]/40 text-center space-y-6">
         <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">
-          Have a proprietary technical initiative?
+          Have an upcoming technical project?
         </h3>
         <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto">
-          We routinely execute mutual non-disclosure agreements (NDAs) prior to reviewing proprietary business workflows, API specifications, or private datasets.
+          We treat project discussions with confidentiality and provide straightforward technical assessments of what is achievable.
         </p>
         <Button
           href="/contact"
@@ -162,7 +157,7 @@ export default function WorkPage() {
           size="lg"
           rightIcon={<ArrowRight className="w-4 h-4" />}
         >
-          Initiate Confidential Discussion
+          Discuss Your Project
         </Button>
       </div>
     </div>

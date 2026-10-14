@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Badge } from "@/components/ui/Badge";
-import { ShieldCheck, Lock, ArrowLeft, Mail, FileText } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Mail, MessageSquare, Phone } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "MZEVOLVE's Privacy Policy outlining how personal data from project inquiries is collected, protected, and retained. We never sell data or use client data for AI model training.",
+    "Privacy policy for MZEVOLVE explaining how information submitted through our website and contact channels is handled.",
 };
 
 export default function PrivacyPage() {
-  const lastUpdated = "October 15, 2026";
+  const lastUpdated = "October 2026";
 
   return (
     <div className="pt-28 pb-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto space-y-12">
@@ -29,14 +29,14 @@ export default function PrivacyPage() {
 
       {/* Header */}
       <div className="space-y-4">
-        <Badge variant="emerald">LEGAL & DATA GOVERNANCE</Badge>
+        <Badge variant="emerald">INFORMATION PRACTICES</Badge>
         <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[var(--text-primary)]">
-          Privacy Policy & Data Protection
+          Privacy Policy
         </h1>
         <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[var(--text-muted)] pt-1">
-          <span>Effective Date: {lastUpdated}</span>
+          <span>Last Updated: {lastUpdated}</span>
           <span>&bull;</span>
-          <span>Entity: {siteConfig.legalName}</span>
+          <span>Company: {siteConfig.name}</span>
         </div>
       </div>
 
@@ -45,69 +45,72 @@ export default function PrivacyPage() {
         <ShieldCheck className="w-5 h-5 text-[#19D879] shrink-0 mt-0.5" />
         <div>
           <strong className="text-[var(--text-primary)] block mb-1">
-            Core Data Privacy Guarantee
+            Our Approach to Your Information
           </strong>
-          MZEVOLVE does not sell personal information, monetize client data, or feed proprietary project submissions into public foundation model training sets. Information submitted through this website is used solely to respond to project inquiries and evaluate technical engagements.
+          MZEVOLVE collects information through this website solely to respond to project inquiries, evaluate technical requirements, and communicate directly with prospective clients. We do not sell or rent personal information to third parties.
         </div>
       </div>
 
-      {/* Policy Sections */}
+      {/* Policy Content */}
       <div className="space-y-10 text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed">
         {/* Section 1 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            1. Scope and Controller Information
+            1. Information We Collect
           </h2>
           <p>
-            This Privacy Policy governs the processing of personal data collected through the official website of MZEVOLVE (
-            <span className="text-[var(--text-primary)] font-mono">{siteConfig.url}</span>
-            ). The data controller responsible for the processing of your personal information is:
+            When you interact with our website or contact us, we may collect the following information that you voluntarily provide:
           </p>
-          <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] font-mono text-xs space-y-1 text-[var(--text-primary)]">
-            <p><strong>Entity:</strong> {siteConfig.legalName}</p>
-            <p><strong>Official Contact:</strong> {siteConfig.contact.officialEmail}</p>
-            <p><strong>Registered Address:</strong> {siteConfig.contact.locationPlaceholder}</p>
-          </div>
+          <ul className="list-disc pl-6 space-y-2 text-sm">
+            <li>
+              <strong>Contact Details:</strong> Your full name, email address, optional company or organization name, and phone number (if you choose to contact us by phone or WhatsApp).
+            </li>
+            <li>
+              <strong>Project Specifications:</strong> Selected area of interest, estimated budget range, target timeline, and descriptions of your project goals or operational challenges.
+            </li>
+            <li>
+              <strong>Technical Communication Logs:</strong> Standard web server request data (such as IP address, browser type, and submission timestamps) used to protect against automated spam and ensure website stability.
+            </li>
+          </ul>
         </section>
 
         {/* Section 2 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            2. Information We Collect
+            2. How We Use Submitted Information
           </h2>
           <p>
-            We collect personal and technical information when you voluntarily submit a project inquiry or communicate with our engineering group:
+            The information you submit is used exclusively for legitimate business communication purposes:
           </p>
-          <ul className="list-disc pl-6 space-y-2 text-sm">
-            <li>
-              <strong>Direct Contact Details:</strong> Full name, professional email address, company or organizational affiliation, and phone number (if optionally supplied).
-            </li>
-            <li>
-              <strong>Project Specifications:</strong> Selected engineering discipline, estimated budget parameters, project timelines, and text descriptions of your technical goals or business challenges.
-            </li>
-            <li>
-              <strong>Technical Telemetry:</strong> Anonymized server logs, masked IP addresses, browser agent metadata, and submission timestamps used exclusively for cybersecurity monitoring, rate-limiting, and spam prevention.
-            </li>
+          <ul className="list-disc pl-6 space-y-1.5 text-sm">
+            <li>To review your project brief and assess technical feasibility.</li>
+            <li>To respond to your inquiries via email, phone, or WhatsApp.</li>
+            <li>To prepare tailored proposals, scopes of work, and project estimates upon request.</li>
+            <li>To maintain records of past business inquiries for follow-up communications.</li>
           </ul>
         </section>
 
         {/* Section 3 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            3. Purpose and Legal Basis for Processing
+            3. Data Handling & Third-Party Services
           </h2>
           <p>
-            We process your information under the following lawful bases:
+            When you submit an inquiry through our contact form:
           </p>
-          <ul className="list-disc pl-6 space-y-2 text-sm">
+          <ul className="list-disc pl-6 space-y-1.5 text-sm">
             <li>
-              <strong>Contractual Preparation & Feasibility:</strong> To evaluate inbound project requirements, perform preliminary architectural assessments, and draft project proposals upon request.
+              <strong>Email Delivery:</strong> Form submissions are formatted and forwarded to our official inbox (
+              <a href={siteConfig.contact.emailLink} className="text-[#19D879] underline font-mono">
+                {siteConfig.contact.email}
+              </a>
+              ) using a configured transactional email provider (such as Resend) or directly via email.
             </li>
             <li>
-              <strong>Legitimate Interests:</strong> To protect our digital infrastructure from malicious bots, brute-force attacks, and distributed spam submissions.
+              <strong>No Third-Party Advertising:</strong> We do not share your contact details with external advertising networks, data brokers, or marketing lists.
             </li>
             <li>
-              <strong>Explicit Consent:</strong> Where you provide consent via our inquiry checkbox prior to submitting project details.
+              <strong>Confidentiality:</strong> Project briefs, technical architectures, and proprietary business context discussed during consultations are treated with strict professional discretion.
             </li>
           </ul>
         </section>
@@ -115,73 +118,67 @@ export default function PrivacyPage() {
         {/* Section 4 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            4. Artificial Intelligence & Data Sovereignty
+            4. Cookies & Browser Storage
           </h2>
           <p>
-            Given our specialization in artificial intelligence and machine learning engineering, we adhere to strict data sovereignty boundaries:
+            This website uses your browser&apos;s local storage (<code>localStorage</code>) solely to remember your preferred visual theme (Light or Dark mode). This setting is stored locally on your device and is not used to identify or track you across the internet.
           </p>
-          <div className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2 text-sm">
-            <p className="font-semibold text-[var(--text-primary)]">
-              Zero Public Model Training
-            </p>
-            <p className="text-xs text-[var(--text-secondary)]">
-              Your inquiry text, proprietary system descriptions, and enterprise context are never transmitted to public AI training datasets or used to train third-party foundation models.
-            </p>
-            <p className="font-semibold text-[var(--text-primary)] pt-2">
-              Isolated Client Environments
-            </p>
-            <p className="text-xs text-[var(--text-secondary)]">
-              When client engagements begin, work is conducted strictly inside client-owned Virtual Private Clouds (VPCs) or containerized architectures with zero-retention enterprise API keys.
-            </p>
-          </div>
+          <p className="text-sm">
+            We do not currently install third-party advertising cookies or cross-site behavioral tracking scripts on this website.
+          </p>
         </section>
 
         {/* Section 5 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            5. Data Retention & Security
+            5. Data Retention & Your Rights
           </h2>
           <p>
-            We retain inquiry information only for as long as necessary to address your project request and maintain appropriate corporate records. Inactive inquiries are purged or permanently anonymized after 12 months.
+            We retain project inquiries and communications for as long as necessary to conduct ongoing business discussions or as required for standard commercial recordkeeping.
           </p>
           <p>
-            All data in transit is encrypted using Transport Layer Security (TLS 1.3). Access to our inquiry database is restricted to authorized MZEVOLVE technical architects using multi-factor authentication.
+            If you have submitted information through our website and wish to review, update, or request the deletion of your inquiry details, please contact us directly:
+          </p>
+          <div className="p-4 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2 text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-[#19D879]" />
+              <span>Email: </span>
+              <a href={siteConfig.contact.emailLink} className="text-[#19D879] underline">
+                {siteConfig.contact.email}
+              </a>
+            </div>
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-[#19D879]" />
+              <span>Phone: </span>
+              <a href={siteConfig.contact.phoneLink} className="text-[#19D879] underline">
+                {siteConfig.contact.phone}
+              </a>
+            </div>
+            <div className="flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-[#19D879]" />
+              <span>WhatsApp: </span>
+              <a
+                href={siteConfig.contact.whatsappPrefilledUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#19D879] underline"
+              >
+                {siteConfig.contact.whatsappNumber}
+              </a>
+            </div>
+          </div>
+          <p className="text-xs text-[var(--text-muted)] pt-1">
+            We review and process verified inquiries promptly without charge.
           </p>
         </section>
 
-        {/* Section 6 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            6. Your Privacy Rights
-          </h2>
-          <p>
-            Depending on your jurisdiction (including GDPR in the EU/UK and CCPA in California), you possess the right to:
-          </p>
-          <ul className="list-disc pl-6 space-y-1.5 text-sm">
-            <li>Request a copy of the personal information we hold about you.</li>
-            <li>Request rectification of inaccurate or outdated information.</li>
-            <li>Request the permanent deletion of your inquiry data (&quot;Right to be Forgotten&quot;).</li>
-            <li>Withdraw previously granted consent at any time.</li>
-          </ul>
-          <p className="pt-2 text-sm">
-            To exercise any of these rights, email us at{" "}
-            <a
-              href={`mailto:${siteConfig.contact.officialEmail}?subject=Privacy%20Rights%20Request`}
-              className="text-[#19D879] underline font-mono"
-            >
-              {siteConfig.contact.officialEmail}
-            </a>
-            . We process all verified requests within 30 days without charge.
-          </p>
-        </section>
-
-        {/* Section 7 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">
-            7. Updates to This Policy
-          </h2>
-          <p className="text-sm">
-            We review and update this Privacy Policy periodically to reflect corporate evolutions or regulatory changes. The date of the most recent revision will always be displayed at the top of this document.
+        {/* Section 6: Legal & Owner Review Notice */}
+        <section className="p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] space-y-2">
+          <h3 className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-bold">
+            Notice Regarding Legal Review & Future Commercial Terms
+          </h3>
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+            This policy outlines our current technical and data-handling practices. Formal contractual engagements, non-disclosure agreements (NDAs), master service agreements, and jurisdiction-specific legal schedules are provided in writing for client projects and remain subject to official company and legal review.
           </p>
         </section>
       </div>
@@ -192,7 +189,7 @@ export default function PrivacyPage() {
           href="/contact"
           className="text-sm font-semibold text-[#19D879] hover:underline"
         >
-          Have questions regarding privacy or confidentiality? Contact our engineering team &rarr;
+          Have questions regarding our data practices? Contact our team &rarr;
         </Link>
       </div>
     </div>

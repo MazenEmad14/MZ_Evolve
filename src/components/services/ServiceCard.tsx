@@ -78,12 +78,12 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
           href={`/services/${service.slug}`}
           className="text-xs font-semibold text-[var(--text-primary)] group-hover:text-[#19D879] inline-flex items-center gap-1.5 transition-colors"
         >
-          <span>Explore Architecture</span>
+          <span>View Service Details</span>
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 text-[#19D879]" />
         </Link>
 
         <span className="text-[10px] font-mono text-[var(--text-muted)]">
-          PRODUCTION-GRADE
+          MZEVOLVE
         </span>
       </div>
     </div>

@@ -14,6 +14,10 @@ The official corporate web application for **MZEVOLVE**, engineering enterprise-
 - **Primary Color**: Emerald Green (`#19D879`)
 - **Background**: Charcoal (`#171B1A`) with surface layers (`#1E2423`, `#242D2B`)
 - **Light Color**: Off-White (`#F5F7F6`)
+- **Official Contact Channels**:
+  - Email: [mzevolve2026@gmail.com](mailto:mzevolve2026@gmail.com)
+  - Phone: `01069216994` (International: `+201069216994`)
+  - WhatsApp: `+201069216994` ([Direct Chat Link](https://wa.me/201069216994))
 - **Typography**: Geometric Sans-Serif (`Plus Jakarta Sans` for body, `Outfit` for display headings)
 - **Aesthetic**: Ambient emerald glows, glassmorphism, responsive micro-interactions, subtle grid backdrops, and seamless Dark/Light theme switching.
 
@@ -25,7 +29,7 @@ The official corporate web application for **MZEVOLVE**, engineering enterprise-
 - **Language**: [TypeScript](https://www.typescriptlang.org/) (strict type-safety)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) (v4 design tokens & CSS variables)
 - **Icons**: [Lucide React](https://lucide.dev/) (consistent geometric tech iconography)
-- **Form Handling**: Full-stack client validation + server-side validation (`/api/contact`), honeypot bot trap, submission speed check, and rate limiting.
+- **Form Handling**: Full-stack client validation + server-side validation (`/api/contact`), honeypot bot trap, submission speed check, rate limiting, and Resend transactional email integration with honest fallback.
 - **SEO & Performance**: Dynamic metadata, OpenGraph tags, Twitter cards, automated `sitemap.xml`, and `robots.txt`.
 
 ---
@@ -79,6 +83,7 @@ The official corporate web application for **MZEVOLVE**, engineering enterprise-
 │   │   ├── contact/
 │   │   │   └── ContactForm.tsx     # Interactive validated project inquiry form
 │   │   └── ui/
+│   │       ├── FloatingWhatsApp.tsx # Floating WhatsApp contact trigger & tooltip
 │   │       ├── Logo.tsx            # MZ Rocket Vector Emblem + Wordmark
 │   │       ├── Button.tsx          # Button & Link component with loading state
 │   │       ├── Badge.tsx           # Status pills & category tags
