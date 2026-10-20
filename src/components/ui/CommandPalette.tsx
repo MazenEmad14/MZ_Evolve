@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -11,7 +11,6 @@ import {
   BookOpen,
   Phone,
   Mail,
-  MessageSquare,
   Moon,
   Sun,
   ArrowRight,
@@ -38,21 +37,40 @@ export const CommandPalette: React.FC = () => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
+  const previousBodyOverflowRef = useRef("");
   const { theme, toggleTheme } = useTheme();
+
+  const closePalette = useCallback(() => {
+    setIsOpen(false);
+    setQuery("");
+    setSelectedIndex(0);
+  }, []);
 
   // Listen for Cmd+K / Ctrl+K and custom event
   useEffect(() => {
+    const openPalette = () => {
+      previouslyFocusedRef.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+      setIsOpen(true);
+    };
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
+        if (isOpen) {
+          closePalette();
+        } else {
+          openPalette();
+        }
       } else if (e.key === "Escape" && isOpen) {
         e.preventDefault();
-        setIsOpen(false);
+        closePalette();
       }
     };
 
-    const handleCustomOpen = () => setIsOpen(true);
+    const handleCustomOpen = () => openPalette();
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("open-command-palette", handleCustomOpen);
@@ -61,18 +79,35 @@ export const CommandPalette: React.FC = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("open-command-palette", handleCustomOpen);
     };
+  }, [closePalette, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen && previouslyFocusedRef.current) {
+      window.requestAnimationFrame(() => previouslyFocusedRef.current?.focus());
+    }
   }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
+      previousBodyOverflowRef.current = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       setTimeout(() => inputRef.current?.focus(), 50);
     } else {
-      document.body.style.overflow = "";
-      setQuery("");
-      setSelectedIndex(0);
+      document.body.style.overflow = previousBodyOverflowRef.current;
     }
+
+    return () => {
+      if (isOpen) {
+        document.body.style.overflow = previousBodyOverflowRef.current;
+      }
+    };
   }, [isOpen]);
+
+  useEffect(() => {
+    listRef.current
+      ?.querySelector<HTMLElement>('[aria-selected="true"]')
+      ?.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex]);
 
   const commands: CommandItem[] = [
     // Navigation
@@ -84,7 +119,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Compass className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["home", "main", "start", "landing"],
     },
@@ -96,7 +131,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Cpu className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/services");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["services", "capabilities", "offerings", "ai"],
     },
@@ -108,7 +143,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Calculator className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/estimator");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["estimator", "calculator", "cost", "pricing", "budget", "scope"],
     },
@@ -120,7 +155,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Sparkles className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/work");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["work", "proofs", "blueprints", "demonstrations", "prototypes"],
     },
@@ -132,7 +167,7 @@ export const CommandPalette: React.FC = () => {
       icon: <BookOpen className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/insights");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["insights", "blog", "articles", "whitepapers"],
     },
@@ -144,7 +179,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Mail className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         router.push("/contact");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["contact", "inquiry", "email", "form", "reach"],
     },
@@ -158,7 +193,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Cpu className="w-4 h-4 text-emerald-400" />,
       action: () => {
         router.push("/services/ai-solutions-llm-applications");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["llm", "gpt", "claude", "nlp", "models", "inference"],
     },
@@ -170,7 +205,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Cpu className="w-4 h-4 text-emerald-400" />,
       action: () => {
         router.push("/services/rag-knowledge-assistants");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["rag", "vector", "embeddings", "pinecone", "chroma", "search"],
     },
@@ -182,7 +217,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Cpu className="w-4 h-4 text-emerald-400" />,
       action: () => {
         router.push("/services/ai-agents-workflow-automation");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["agents", "autonomous", "tools", "workflow", "automation"],
     },
@@ -194,7 +229,7 @@ export const CommandPalette: React.FC = () => {
       icon: <Cpu className="w-4 h-4 text-emerald-400" />,
       action: () => {
         router.push("/services/websites-business-applications");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["web", "nextjs", "react", "fullstack", "saas", "dashboard"],
     },
@@ -208,7 +243,7 @@ export const CommandPalette: React.FC = () => {
       icon: <WhatsAppIcon className="w-4 h-4 text-[#19D879]" />,
       action: () => {
         window.open(siteConfig.contact.whatsappPrefilledUrl, "_blank", "noopener,noreferrer");
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["whatsapp", "chat", "message"],
     },
@@ -219,8 +254,8 @@ export const CommandPalette: React.FC = () => {
       subtitle: siteConfig.contact.phone,
       icon: <Phone className="w-4 h-4 text-[#19D879]" />,
       action: () => {
-        window.location.href = siteConfig.contact.phoneLink;
-        setIsOpen(false);
+        window.location.assign(siteConfig.contact.phoneLink);
+        closePalette();
       },
       keywords: ["phone", "call", "telephone"],
     },
@@ -231,8 +266,8 @@ export const CommandPalette: React.FC = () => {
       subtitle: siteConfig.contact.email,
       icon: <Mail className="w-4 h-4 text-[#19D879]" />,
       action: () => {
-        window.location.href = siteConfig.contact.emailLink;
-        setIsOpen(false);
+        window.location.assign(siteConfig.contact.emailLink);
+        closePalette();
       },
       keywords: ["email", "mail", "gmail"],
     },
@@ -246,7 +281,7 @@ export const CommandPalette: React.FC = () => {
       icon: theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />,
       action: () => {
         toggleTheme();
-        setIsOpen(false);
+        closePalette();
       },
       keywords: ["theme", "dark", "light", "mode", "color"],
     },
@@ -274,6 +309,26 @@ export const CommandPalette: React.FC = () => {
     } else if (e.key === "Enter" && filteredCommands[selectedIndex]) {
       e.preventDefault();
       filteredCommands[selectedIndex].action();
+    } else if (e.key === "Tab") {
+      const focusableElements = Array.from(
+        e.currentTarget.querySelectorAll<HTMLElement>(
+          'input:not([disabled]), button:not([disabled])',
+        ),
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (
+        e.shiftKey &&
+        (document.activeElement === firstElement ||
+          document.activeElement === e.currentTarget)
+      ) {
+        e.preventDefault();
+        lastElement?.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement?.focus();
+      }
     }
   };
 
@@ -283,46 +338,64 @@ export const CommandPalette: React.FC = () => {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-150"
-      onClick={() => setIsOpen(false)}
+      aria-labelledby="command-palette-title"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-150"
+      onClick={closePalette}
     >
       <div
-        className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-[#171B1A] border border-[#273430] shadow-2xl shadow-[#19D879]/10 text-white"
+        className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-2xl shadow-[#19D879]/10 text-[var(--text-primary)]"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDownInList}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-[#273430]">
-          <Search className="w-5 h-5 text-[#19D879] shrink-0 me-3" />
+        <div className="flex items-center px-4 py-3.5 border-b border-[var(--border-subtle)]">
+          <Search className="w-5 h-5 text-[var(--brand-emerald)] shrink-0 me-3" />
+          <h2 id="command-palette-title" className="sr-only">Search MZEVOLVE</h2>
           <input
             ref={inputRef}
             type="text"
             value={query}
+            role="combobox"
+            aria-label="Search pages, services, and actions"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            aria-controls="command-palette-results"
+            aria-activedescendant={
+              filteredCommands[selectedIndex]
+                ? `command-${filteredCommands[selectedIndex].id}`
+                : undefined
+            }
             onChange={(e) => {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            placeholder="Type a command or search..."
-            className="flex-1 bg-transparent text-sm sm:text-base text-white placeholder-zinc-400 outline-none"
+            placeholder="Search pages, services, or actions..."
+            className="flex-1 bg-transparent text-sm sm:text-base text-[var(--text-primary)] placeholder:text-[var(--text-muted)] outline-none"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="p-1 text-zinc-400 hover:text-white me-2 rounded"
+              className="p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] me-2 rounded"
               aria-label="Clear search query"
             >
               <X className="w-4 h-4" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono text-zinc-400 bg-[#1E2422] border border-[#273430] rounded">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded">
             ESC
           </kbd>
         </div>
 
         {/* Results List */}
-        <div ref={listRef} className="max-h-80 overflow-y-auto p-2 space-y-1">
+        <div
+          id="command-palette-results"
+          ref={listRef}
+          role="listbox"
+          aria-label="Search results"
+          className="max-h-80 overflow-y-auto p-2 space-y-1"
+        >
           {filteredCommands.length === 0 ? (
-            <div className="py-12 text-center text-sm text-zinc-400">
+            <div role="status" className="py-12 text-center text-sm text-[var(--text-muted)]">
               No matching commands or pages found for &quot;{query}&quot;.
             </div>
           ) : (
@@ -331,37 +404,42 @@ export const CommandPalette: React.FC = () => {
               return (
                 <button
                   key={cmd.id}
+                  id={`command-${cmd.id}`}
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={cmd.action}
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-start transition-all duration-150 ${
                     isSelected
-                      ? "bg-[#1E2422] border border-[#19D879]/40 text-white shadow-sm"
-                      : "text-zinc-300 hover:bg-[#1E2422]/60 border border-transparent"
+                      ? "bg-[var(--bg-surface-elevated)] border border-[var(--border-highlight)] text-[var(--text-primary)] shadow-sm"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface-elevated)] border border-transparent"
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`p-2 rounded-lg shrink-0 transition-colors ${
-                        isSelected ? "bg-[#19D879]/15 text-[#19D879]" : "bg-[#111413] text-zinc-400"
+                        isSelected
+                          ? "bg-[var(--brand-emerald-glow)] text-[var(--brand-emerald)]"
+                          : "bg-[var(--bg-base)] text-[var(--text-muted)]"
                       }`}
                     >
                       {cmd.icon}
                     </div>
                     <div className="truncate">
-                      <div className="text-sm font-medium text-white flex items-center gap-2">
+                      <div className="text-sm font-medium text-[var(--text-primary)] flex items-center gap-2">
                         {cmd.title}
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#111413] text-zinc-400 border border-[#273430]">
+                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--bg-base)] text-[var(--text-muted)] border border-[var(--border-subtle)]">
                           {cmd.category}
                         </span>
                       </div>
                       {cmd.subtitle && (
-                        <div className="text-xs text-zinc-400 truncate">{cmd.subtitle}</div>
+                        <div className="text-xs text-[var(--text-secondary)] truncate">{cmd.subtitle}</div>
                       )}
                     </div>
                   </div>
                   <ArrowRight
                     className={`w-4 h-4 shrink-0 ms-2 transition-transform ${
-                      isSelected ? "text-[#19D879] translate-x-1" : "text-zinc-600 opacity-0"
+                      isSelected                       ? "text-[var(--brand-emerald)] translate-x-1" : "text-[var(--text-muted)] opacity-0"
                     }`}
                   />
                 </button>
@@ -371,13 +449,13 @@ export const CommandPalette: React.FC = () => {
         </div>
 
         {/* Footer shortcuts info */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-[#111413] border-t border-[#273430] text-[11px] text-zinc-400">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] text-[11px] text-[var(--text-muted)]">
           <div className="flex items-center gap-2">
             <span>Navigate:</span>
-            <kbd className="px-1.5 py-0.5 bg-[#1E2422] border border-[#273430] rounded font-mono">↑</kbd>
-            <kbd className="px-1.5 py-0.5 bg-[#1E2422] border border-[#273430] rounded font-mono">↓</kbd>
+            <kbd className="px-1.5 py-0.5 bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded font-mono">↑</kbd>
+            <kbd className="px-1.5 py-0.5 bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded font-mono">↓</kbd>
             <span>Select:</span>
-            <kbd className="px-1.5 py-0.5 bg-[#1E2422] border border-[#273430] rounded font-mono">↵</kbd>
+            <kbd className="px-1.5 py-0.5 bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded font-mono">↵</kbd>
           </div>
           <div>
             <span className="text-emerald-400 font-mono">MZEVOLVE</span> Command Hub

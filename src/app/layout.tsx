@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/images/logo.jpeg",
-    shortcut: "/images/logo.jpeg",
-    apple: "/images/logo.jpeg",
+    icon: "/logo.webp",
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
   },
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
@@ -55,9 +55,9 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/logo.jpeg",
-        width: 800,
-        height: 800,
+        url: "/logo-social.jpg",
+        width: 1200,
+        height: 630,
         alt: `${siteConfig.name} Logo`,
       },
     ],
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.shortDescription,
-    images: ["/images/logo.jpeg"],
+    images: ["/logo-social.jpg"],
   },
   robots: {
     index: true,
@@ -106,4 +106,3 @@ export default function RootLayout({
     </html>
   );
 }
-

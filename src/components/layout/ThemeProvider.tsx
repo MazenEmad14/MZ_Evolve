@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  startTransition,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type Theme = "dark" | "light";
 
@@ -12,26 +18,33 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+function applyTheme(theme: Theme) {
+  document.documentElement.classList.toggle("light", theme === "light");
+  document.documentElement.style.colorScheme = theme;
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", theme === "light" ? "#F5F7F6" : "#171B1A");
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("mzevolve-theme") as Theme | null;
     if (savedTheme === "light" || savedTheme === "dark") {
-      setThemeState(savedTheme);
-      document.documentElement.classList.toggle("light", savedTheme === "light");
+      if (savedTheme !== "dark") {
+        startTransition(() => setThemeState(savedTheme));
+      }
+      applyTheme(savedTheme);
     } else {
-      // Default to dark mode (#171B1A)
-      document.documentElement.classList.remove("light");
+      applyTheme("dark");
     }
-    setMounted(true);
   }, []);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem("mzevolve-theme", newTheme);
-    document.documentElement.classList.toggle("light", newTheme === "light");
+    applyTheme(newTheme);
   };
 
   const toggleTheme = () => {

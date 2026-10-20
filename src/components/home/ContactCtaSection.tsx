@@ -6,7 +6,7 @@ import { WhatsAppIcon } from "../ui/WhatsAppIcon";
 
 export const ContactCtaSection: React.FC = () => {
   return (
-    <section className="py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)]">
+    <section data-nav-section="/contact" className="py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)]">
       <div className="max-w-6xl mx-auto">
         <div className="relative rounded-3xl overflow-hidden p-8 sm:p-12 lg:p-16 bg-gradient-to-br from-[#1E2523] via-[#1A201F] to-[#121615] border border-[#19D879]/30 shadow-2xl">
           {/* Subtle Ambient Emerald Light */}

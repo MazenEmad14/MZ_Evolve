@@ -1,11 +1,11 @@
 import React from "react";
+import Link from "next/link";
 import { Button } from "../ui/Button";
-import { Badge } from "../ui/Badge";
-import { ArrowRight, Terminal, Cpu, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Terminal, Cpu, ShieldCheck } from "lucide-react";
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 lg:px-8 subtle-grid overflow-hidden">
+    <section data-nav-section="/" className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 lg:px-8 subtle-grid overflow-hidden">
       {/* Radial Emerald Ambient Glow */}
       <div
         className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full blur-[140px] pointer-events-none -z-10 opacity-70"
@@ -28,14 +28,14 @@ export const HeroSection: React.FC = () => {
             Beyond Ordinary.
             <br />
             <span
-              className="inline-block bg-gradient-to-r from-[#19D879] via-[#2dfa95] to-[#15b867] bg-clip-text text-transparent"
+              className="inline-block bg-gradient-to-r from-[var(--brand-emerald)] via-[var(--brand-emerald-hover)] to-[var(--brand-emerald)] bg-clip-text text-transparent"
             >
               Built to Evolve.
             </span>
           </h1>
 
           <p className="max-w-2xl mx-auto text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed font-normal">
-            We engineer practical AI solutions, knowledge assistants, workflow automations, and modern web applications built to adapt and perform.
+            We build dependable AI systems and digital products that help teams simplify complex work and scale with confidence.
           </p>
         </div>
 
@@ -52,15 +52,6 @@ export const HeroSection: React.FC = () => {
           </Button>
 
           <Button
-            href="/estimator"
-            variant="secondary"
-            size="lg"
-            className="w-full sm:w-auto"
-          >
-            Estimate Scope
-          </Button>
-
-          <Button
             href="/services"
             variant="secondary"
             size="lg"
@@ -69,6 +60,16 @@ export const HeroSection: React.FC = () => {
             Explore Services
           </Button>
         </div>
+        <p className="text-sm text-[var(--text-secondary)]">
+          Still shaping the idea?{" "}
+          <Link
+            href="/estimator"
+            className="inline-flex items-center gap-1 font-semibold text-[var(--brand-emerald)] underline-offset-4 hover:underline"
+          >
+            Get an initial scope estimate
+            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+        </p>
 
         {/* Technical Value Indicators */}
         <div className="pt-10 border-t border-[var(--border-subtle)]/60 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">

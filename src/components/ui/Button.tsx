@@ -10,6 +10,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   external?: boolean;
+  onNavigate?: () => void;
   className?: string;
   children: React.ReactNode;
 }
@@ -22,6 +23,7 @@ export const Button: React.FC<ButtonProps> = ({
   leftIcon,
   rightIcon,
   external = false,
+  onNavigate,
   className = "",
   children,
   disabled,
@@ -75,7 +77,11 @@ export const Button: React.FC<ButtonProps> = ({
       );
     }
     return (
-      <Link href={href} className={`${baseStyles} ${sizeStyles} ${variantStyles} ${className}`}>
+      <Link
+        href={href}
+        onNavigate={onNavigate}
+        className={`${baseStyles} ${sizeStyles} ${variantStyles} ${className}`}
+      >
         {content}
       </Link>
     );

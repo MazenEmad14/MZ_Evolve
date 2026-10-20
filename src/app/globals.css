@@ -2,6 +2,7 @@
 
 @layer base {
   :root {
+    color-scheme: dark;
     --bg-base: #171B1A;
     --bg-surface: #1E2423;
     --bg-surface-elevated: #242D2B;
@@ -18,6 +19,7 @@
   }
 
   html.light {
+    color-scheme: light;
     --bg-base: #F5F7F6;
     --bg-surface: #FFFFFF;
     --bg-surface-elevated: #E9EFEB;
@@ -27,9 +29,9 @@
     --text-primary: #171B1A;
     --text-secondary: #3D4844;
     --text-muted: #677570;
-    --brand-emerald: #0ea85c;
-    --brand-emerald-hover: #0b8a4b;
-    --brand-emerald-glow: rgba(14, 168, 92, 0.12);
+    --brand-emerald: #087a45;
+    --brand-emerald-hover: #06643b;
+    --brand-emerald-glow: rgba(8, 122, 69, 0.12);
     --accent-glow: radial-gradient(circle at 50% 0%, rgba(25, 216, 121, 0.08) 0%, transparent 60%);
   }
 }
@@ -92,6 +94,7 @@ html.light .subtle-grid {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
+input[type="range"]:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--brand-emerald);
@@ -122,4 +125,3 @@ select:focus-visible {
     display: none !important;
   }
 }
-

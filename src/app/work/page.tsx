@@ -1,6 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { demonstrationsData } from "@/data/demonstrations";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -11,7 +10,7 @@ import {
   Lock,
 } from "lucide-react";
 
-import { InteractiveDemonstrations } from "@/components/work/InteractiveDemonstrations";
+import { DeferredInteractiveDemonstrations } from "@/components/work/DeferredInteractiveDemonstrations";
 
 export const metadata: Metadata = {
   title: "Projects & Demonstrations",
@@ -60,7 +59,7 @@ export default function WorkPage() {
       </div>
 
       {/* Hands-On Interactive Simulators (RAG, Agent State Machine, Token Economics) */}
-      <InteractiveDemonstrations />
+      <DeferredInteractiveDemonstrations />
 
       {/* Demonstrations List */}
       <div className="space-y-10">

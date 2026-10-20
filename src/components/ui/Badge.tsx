@@ -20,7 +20,7 @@ export const Badge: React.FC<BadgeProps> = ({
 
   const variantStyles = {
     emerald:
-      "bg-[#19D879]/10 text-[#19D879] border border-[#19D879]/30",
+      "bg-[var(--brand-emerald-glow)] text-[var(--brand-emerald)] border border-[var(--border-highlight)]",
     charcoal:
       "bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)]",
     outline:

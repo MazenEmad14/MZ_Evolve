@@ -37,12 +37,17 @@ Vercel provides native edge caching, automatic SSL, and zero-configuration Next.
 - **Install Command**: `npm install`
 
 ### Step 3: Set Environment Variables
-In the Vercel project settings under **Environment Variables**, add:
+In the Vercel project settings under **Environment Variables**, add the following, selecting **Production** and **Preview** as appropriate:
 - `NEXT_PUBLIC_SITE_URL`: `https://mzevolve.com` (or your staging/preview URL)
 - `NEXT_PUBLIC_CONTACT_EMAIL`: `mzevolve2026@gmail.com`
 - `NEXT_PUBLIC_INQUIRIES_EMAIL`: `mzevolve2026@gmail.com`
-- `RESEND_API_KEY`: *(Optional in dev, required in production for automated email forwarding to `mzevolve2026@gmail.com`)*
-- `RESEND_FROM_EMAIL`: `MZEVOLVE Inquiries <onboarding@resend.dev>` (or custom verified domain sender)
+- `RESEND_API_KEY`: **Required for form email delivery.** Create an API key in Resend and add it as a Vercel secret; never expose it as a `NEXT_PUBLIC_` variable.
+- `RESEND_FROM_EMAIL`: **Required.** Set an address authorized by Resend, such as `MZEVOLVE Inquiries <inquiries@your-verified-domain.com>`. Verify the sending domain in Resend before using it.
+- `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`: *(Recommended for production.)* Configure an Upstash Redis database to share contact-form rate limits across Vercel serverless instances. Without them, rate limiting is best-effort per instance only.
+
+The contact endpoint sends validated inquiries to `mzevolve2026@gmail.com` and uses the submitter's email as `reply_to`. It reports success only after Resend accepts the message. Without `RESEND_API_KEY`, the endpoint returns an error stating that the message was not sent.
+
+After adding or changing environment variables in Vercel, redeploy the project for them to take effect. Submit a real test inquiry from the deployed Preview and confirm it arrives at `mzevolve2026@gmail.com` before promoting that deployment to Production.
 
 ### Step 4: Configure Custom Domain & DNS
 1. Navigate to **Project Settings > Domains**.
@@ -145,8 +150,8 @@ Upon deploying to production:
 4. Submit a test inquiry on `/contact` and confirm:
    - Client-side validation catches empty fields.
    - Server-side validation assigns a unique inquiry ID (e.g. `MZ-XXXXXXXX`).
-   - If `RESEND_API_KEY` is configured, notification email arrives at `mzevolve2026@gmail.com`.
-   - If email is not yet configured, form gracefully provides honest fallback directing client to `mzevolve2026@gmail.com` or WhatsApp.
+   - If `RESEND_API_KEY` and an authorized `RESEND_FROM_EMAIL` are configured, notification email arrives at `mzevolve2026@gmail.com`.
+   - If email is not configured, the form reports that the message was not sent and provides direct email/WhatsApp contact options.
 5. Verify Clickable Channels:
    - All email links open `mailto:mzevolve2026@gmail.com`.
    - Phone link triggers dialing `tel:+201069216994` (displayed as `01069216994`).

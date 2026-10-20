@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { siteConfig } from "@/config/site";
 
+export const maxDuration = 15;
+
 // In-memory rate limiting map for basic protection against local request flooding
 const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
@@ -38,6 +40,7 @@ async function isRateLimited(ip: string): Promise<boolean> {
       const key = `mzevolve_rl_${ip}`;
       const res = await fetch(`${redisUrl}/pipeline`, {
         method: "POST",
+        signal: AbortSignal.timeout(3000),
         headers: {
           Authorization: `Bearer ${redisToken}`,
           "Content-Type": "application/json",
@@ -50,13 +53,21 @@ async function isRateLimited(ip: string): Promise<boolean> {
       if (res.ok) {
         const data = await res.json();
         const count = data[0]?.result;
-        if (typeof count === "number" && count > MAX_REQUESTS_PER_WINDOW) {
+        if (typeof count !== "number") {
+          throw new Error("Unexpected Upstash rate-limit response.");
+        }
+        if (count > MAX_REQUESTS_PER_WINDOW) {
           return true;
         }
         return false;
       }
+      console.warn(
+        `[MZEVOLVE RATE LIMIT] Upstash returned status ${res.status}; using best-effort in-memory fallback.`,
+      );
     } catch {
-      // Fallback to in-memory rate limiter on network exception
+      console.warn(
+        "[MZEVOLVE RATE LIMIT] Upstash unavailable; using best-effort in-memory fallback.",
+      );
     }
   }
 
@@ -194,19 +205,36 @@ export async function POST(req: NextRequest) {
 
     // Check email delivery configuration
     const resendApiKey = process.env.RESEND_API_KEY;
-    const isDevelopment =
-      process.env.NODE_ENV === "development" ||
+    const isDevelopmentSimulation =
+      process.env.NODE_ENV === "development" &&
       process.env.ALLOW_SIMULATED_SUBMISSIONS === "true";
 
     // 4. Handle Email Delivery
     if (resendApiKey) {
+      const fromEmail = process.env.RESEND_FROM_EMAIL;
+      if (!fromEmail) {
+        console.error(
+          "[MZEVOLVE INQUIRY ERROR] RESEND_FROM_EMAIL is not configured; email not sent.",
+        );
+        return NextResponse.json(
+          {
+            success: false,
+            deliveryStatus: "sender_unconfigured",
+            message:
+              "Your message was not sent because the email sender is not configured. Please email " +
+              siteConfig.contact.email +
+              " directly.",
+          },
+          { status: 503 },
+        );
+      }
+
       try {
-        const fromEmail =
-          process.env.RESEND_FROM_EMAIL || "MZEVOLVE Inquiries <onboarding@resend.dev>";
         const toEmail = siteConfig.contact.email; // mzevolve2026@gmail.com
 
         const emailResponse = await fetch("https://api.resend.com/emails", {
           method: "POST",
+          signal: AbortSignal.timeout(10000),
           headers: {
             Authorization: `Bearer ${resendApiKey}`,
             "Content-Type": "application/json",
@@ -237,7 +265,6 @@ ${sanitizedInquiry.projectDescription}
         });
 
         if (!emailResponse.ok) {
-          const errDetail = await emailResponse.text();
           console.error(`[MZEVOLVE INQUIRY ERROR] Resend dispatch failed (status ${emailResponse.status})`);
           return NextResponse.json(
             {
@@ -258,7 +285,7 @@ ${sanitizedInquiry.projectDescription}
           message:
             "Thank you. Your inquiry has been confirmed and delivered to our team. We will review your brief and reply via email within 1 to 2 business days.",
         });
-      } catch (networkErr) {
+      } catch {
         console.error("[MZEVOLVE INQUIRY ERROR] Network error connecting to mail provider");
         return NextResponse.json(
           {
@@ -271,33 +298,32 @@ ${sanitizedInquiry.projectDescription}
       }
     }
 
-    // If Resend is NOT configured:
-    // In local development or simulation mode:
-    if (isDevelopment) {
+    // Simulation must be explicitly enabled and never represents an emailed inquiry.
+    if (isDevelopmentSimulation) {
       console.log(`[MZEVOLVE INQUIRY DEV SIMULATION] ID: ${inquiryId} | Service: ${sanitizedInquiry.serviceInterest}`);
       return NextResponse.json({
         success: true,
         inquiryId,
         deliveryStatus: "simulated_dev",
         message:
-          "Your inquiry was successfully validated in development mode. In production, set RESEND_API_KEY in your environment to enable automated email forwarding to " +
+          "Development simulation only: this inquiry was not emailed. Configure RESEND_API_KEY and a verified RESEND_FROM_EMAIL to send inquiries to " +
           siteConfig.contact.email +
           ".",
       });
     }
 
-    // In production without an active email provider:
-    // Do not falsely report delivery. Show an honest, user-friendly message directing to direct channels.
-    console.warn(`[MZEVOLVE INQUIRY UNCONFIGURED] Submission received but RESEND_API_KEY is not set.`);
+    console.warn(
+      `[MZEVOLVE INQUIRY UNCONFIGURED] Email not sent because RESEND_API_KEY is not set.`,
+    );
     return NextResponse.json(
       {
         success: false,
         deliveryStatus: "unconfigured_in_production",
-        message: `Automated online form dispatch is currently awaiting configuration. Please send your project details directly to ${siteConfig.contact.email} or contact us via WhatsApp at ${siteConfig.contact.whatsappNumber}.`,
+        message: `Your message was not sent because email delivery is not configured. Please try again later or email ${siteConfig.contact.email} directly.`,
       },
       { status: 503 }
     );
-  } catch (error) {
+  } catch {
     console.error("[MZEVOLVE INQUIRY ERROR] Unexpected server error occurred");
     return NextResponse.json(
       {

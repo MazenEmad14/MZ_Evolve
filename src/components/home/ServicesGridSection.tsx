@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 
 export const ServicesGridSection: React.FC = () => {
   return (
-    <section id="services" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)]">
+    <section id="services" data-nav-section="/services" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)]">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           badgeText="CORE CAPABILITIES"

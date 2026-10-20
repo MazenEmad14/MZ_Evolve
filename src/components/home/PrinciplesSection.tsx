@@ -12,7 +12,7 @@ const iconMap: Record<string, React.FC<{ className?: string }>> = {
 
 export const PrinciplesSection: React.FC = () => {
   return (
-    <section id="principles" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
+    <section id="principles" data-nav-section="/about" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           badgeText="ENGINEERING VALUES"

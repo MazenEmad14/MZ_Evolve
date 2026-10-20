@@ -8,12 +8,12 @@ import { ShieldCheck, ArrowRight, CheckCircle } from "lucide-react";
 
 export const GenuineWorkSection: React.FC = () => {
   return (
-    <section id="proofs" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
+    <section id="proofs" data-nav-section="/work" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           badgeText="TECHNOLOGY DEMONSTRATIONS"
           title="Verified Prototypes & Blueprints"
-          subtitle="We test and validate software patterns through working internal prototypes. Below are technical demonstrations engineered by MZEVOLVE."
+          subtitle="Explore internal prototypes and interactive proofs built by MZEVOLVE. These demonstrate engineering approaches; they are not client case studies."
           align="center"
         />
 
@@ -22,9 +22,9 @@ export const GenuineWorkSection: React.FC = () => {
           <ShieldCheck className="w-4 h-4 text-[#19D879] shrink-0 mt-0.5" />
           <div>
             <span className="font-semibold text-[var(--text-primary)]">
-              Client Confidentiality Policy:
+              About these projects:
             </span>{" "}
-            We treat client projects with strict professional discretion and do not publish private client codebases or unverified case studies. The systems below represent verified internal demonstrations and technical proofs.
+            Client work remains confidential. Every project shown below is an internal demonstration using sample or simulated scenarios, not a client deployment.
           </div>
         </div>
 

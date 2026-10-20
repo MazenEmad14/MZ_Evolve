@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "../ui/Logo";
@@ -15,7 +15,6 @@ import {
   ArrowUpRight,
   Sparkles,
   Search,
-  Command,
 } from "lucide-react";
 
 export const Navbar: React.FC = () => {
@@ -23,6 +22,8 @@ export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeHomeSection, setActiveHomeSection] = useState<string | null>(null);
+  const mobileMenuToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,10 +33,64 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when pathname changes
   useEffect(() => {
-    setMobileMenuOpen(false);
+    if (pathname !== "/") {
+      return;
+    }
+
+    const updateActiveSection = () => {
+      let activeHref = "/";
+
+      for (const section of document.querySelectorAll<HTMLElement>(
+        "[data-nav-section]",
+      )) {
+        if (section.getBoundingClientRect().top > 140) break;
+        activeHref = section.dataset.navSection || activeHref;
+      }
+
+      setActiveHomeSection(activeHref);
+    };
+
+    const initialUpdate = window.requestAnimationFrame(updateActiveSection);
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.cancelAnimationFrame(initialUpdate);
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
   }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const firstLink = document.querySelector<HTMLAnchorElement>(
+      "#mobile-navigation a",
+    );
+    firstLink?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobileMenuOpen(false);
+        mobileMenuToggleRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [mobileMenuOpen]);
+
+  const activeNavHref =
+    pathname === "/"
+      ? activeHomeSection || "/"
+      : siteConfig.navigation
+          .filter(
+            (item) =>
+              item.href !== "/" &&
+              (pathname === item.href || pathname.startsWith(`${item.href}/`)),
+          )
+          .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
     <header
@@ -48,7 +103,7 @@ export const Navbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Brand Logo */}
-          <Logo size="md" />
+          <Logo size="md" shape="circle" />
 
           {/* Desktop Navigation */}
           <nav
@@ -56,19 +111,17 @@ export const Navbar: React.FC = () => {
             className="hidden md:flex items-center gap-1 lg:gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-surface)]/60 border border-[var(--border-subtle)] backdrop-blur-sm"
           >
             {siteConfig.navigation.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+              const isActive = item.href === activeNavHref;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 ${
+                  aria-current={isActive ? "location" : undefined}
+                  className={`relative text-sm font-medium px-4 py-2 rounded-full transition-all duration-200 after:absolute after:left-4 after:right-4 after:bottom-0.5 after:h-0.5 after:rounded-full after:bg-[var(--brand-emerald)] after:transition-transform after:duration-200 ${
                     isActive
-                      ? "text-[#19D879] bg-[#19D879]/10 font-semibold"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)]"
+                      ? "text-[var(--brand-emerald)] bg-[var(--brand-emerald-glow)] font-semibold after:scale-x-100"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] after:scale-x-0"
                   }`}
                 >
                   {item.label}
@@ -82,19 +135,22 @@ export const Navbar: React.FC = () => {
             {/* Command Palette Trigger */}
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
-              aria-label="Search and command hub (Cmd+K)"
+              aria-label="Search pages, services, and actions"
+              aria-haspopup="dialog"
+              aria-keyshortcuts="Control+K Meta+K"
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] transition-colors cursor-pointer"
             >
-              <Search className="w-3.5 h-3.5 text-[#19D879]" />
+              <Search className="w-3.5 h-3.5 text-[var(--brand-emerald)]" />
               <span className="hidden lg:inline">Search</span>
               <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] rounded text-[var(--text-muted)]">
-                ⌘K
+                Ctrl/⌘ K
               </kbd>
             </button>
 
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
+              aria-pressed={theme === "light"}
               aria-label={
                 theme === "dark"
                   ? "Switch to Light Mode"
@@ -124,16 +180,23 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-1.5 md:hidden">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-command-palette"))}
-              aria-label="Search"
-              className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
+              aria-label="Search pages, services, and actions"
+              aria-haspopup="dialog"
+              aria-keyshortcuts="Control+K Meta+K"
+              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
             >
-              <Search className="w-4 h-4 text-[#19D879]" />
+              <Search className="w-4 h-4 text-[var(--brand-emerald)]" />
             </button>
 
             <button
               onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
+              aria-pressed={theme === "light"}
+              aria-label={
+                theme === "dark"
+                  ? "Switch to Light Mode"
+                  : "Switch to Dark Mode"
+              }
+              className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4 text-[#19D879]" />
@@ -143,10 +206,12 @@ export const Navbar: React.FC = () => {
             </button>
 
             <button
+              ref={mobileMenuToggleRef}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle Navigation Menu"
-              className="p-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer"
+              aria-controls="mobile-navigation"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              className="min-h-11 min-w-11 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)] border border-[var(--border-subtle)] cursor-pointer inline-flex items-center justify-center"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6 text-[#19D879]" />
@@ -161,25 +226,28 @@ export const Navbar: React.FC = () => {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[var(--bg-base)] border-b border-[var(--border-subtle)] px-4 pt-3 pb-6 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-          <nav aria-label="Mobile Navigation" className="flex flex-col space-y-1">
+          <nav
+            id="mobile-navigation"
+            aria-label="Mobile Navigation"
+            className="flex flex-col space-y-1"
+          >
             {siteConfig.navigation.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+              const isActive = item.href === activeNavHref;
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-current={isActive ? "location" : undefined}
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`text-base font-medium px-4 py-3 rounded-lg flex items-center justify-between ${
                     isActive
-                      ? "text-[#19D879] bg-[#19D879]/10 font-semibold"
+                      ? "text-[var(--brand-emerald)] bg-[var(--brand-emerald-glow)] font-semibold"
                       : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)]"
                   }`}
                 >
                   <span>{item.label}</span>
-                  {isActive && <Sparkles className="w-4 h-4 text-[#19D879]" />}
+                  {isActive && <Sparkles className="w-4 h-4 text-[var(--brand-emerald)]" />}
                 </Link>
               );
             })}
@@ -192,6 +260,7 @@ export const Navbar: React.FC = () => {
               size="md"
               className="w-full"
               rightIcon={<ArrowUpRight className="w-4 h-4" />}
+              onNavigate={() => setMobileMenuOpen(false)}
             >
               Start a Project
             </Button>

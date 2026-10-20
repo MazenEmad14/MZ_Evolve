@@ -38,9 +38,8 @@ The official corporate web application for **MZEVOLVE**, engineering enterprise-
 
 ```
 ├── public/
-│   ├── images/
-│   │   └── logo.jpeg               # MZEVOLVE brand mark
-│   └── logo.jpeg                   # Public logo root
+│   ├── logo.webp                   # Optimized MZEVOLVE brand mark
+│   └── logo-social.jpg             # Optimized Open Graph / social preview
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx              # Root layout with fonts, SEO & ThemeProvider
@@ -118,6 +117,8 @@ Copy the example environment file:
 ```bash
 cp .env.example .env.local
 ```
+
+For Vercel production deployments, configure `RESEND_API_KEY` to enable contact-form email delivery. Configure `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` for rate limiting shared across serverless instances; in-memory rate limiting is best-effort per instance only.
 
 ### 3. Run Development Server
 ```bash

@@ -11,12 +11,7 @@ import {
   Sparkles,
   Sliders,
   DollarSign,
-  Clock,
   CheckCircle2,
-  AlertCircle,
-  ArrowRight,
-  ShieldCheck,
-  Terminal,
 } from "lucide-react";
 
 export const InteractiveDemonstrations: React.FC = () => {
@@ -146,7 +141,7 @@ export const InteractiveDemonstrations: React.FC = () => {
   }, [dailyUsers, queriesPerUser, promptTokens, completionTokens]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto my-12 p-6 sm:p-10 rounded-3xl bg-[#171B1A] border border-[#273430] shadow-2xl">
+    <div className="w-full max-w-6xl mx-auto my-12 p-4 sm:p-10 rounded-3xl bg-[#171B1A] border border-[#273430] shadow-2xl">
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto mb-10">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#19D879]/10 border border-[#19D879]/20 text-[#19D879] text-xs font-mono mb-3">
@@ -163,10 +158,16 @@ export const InteractiveDemonstrations: React.FC = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex flex-wrap items-center justify-center gap-2 p-1.5 mb-8 rounded-2xl bg-[#111413] border border-[#273430] max-w-xl mx-auto">
+      <div
+        role="group"
+        aria-label="Choose an engineering simulator"
+        className="grid grid-cols-1 sm:grid-cols-3 items-stretch gap-2 p-1.5 mb-8 rounded-2xl bg-[#111413] border border-[#273430] max-w-3xl mx-auto"
+      >
         <button
+          type="button"
+          aria-pressed={activeTab === "rag"}
           onClick={() => setActiveTab("rag")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`min-h-11 flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "rag"
               ? "bg-[#1E2422] text-[#19D879] border border-[#19D879]/40 shadow-sm"
               : "text-zinc-400 hover:text-white"
@@ -176,8 +177,10 @@ export const InteractiveDemonstrations: React.FC = () => {
           <span>RAG Vector Search</span>
         </button>
         <button
+          type="button"
+          aria-pressed={activeTab === "agent"}
           onClick={() => setActiveTab("agent")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`min-h-11 flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "agent"
               ? "bg-[#1E2422] text-[#19D879] border border-[#19D879]/40 shadow-sm"
               : "text-zinc-400 hover:text-white"
@@ -187,8 +190,10 @@ export const InteractiveDemonstrations: React.FC = () => {
           <span>Agent State Machine</span>
         </button>
         <button
+          type="button"
+          aria-pressed={activeTab === "tokens"}
           onClick={() => setActiveTab("tokens")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`min-h-11 flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeTab === "tokens"
               ? "bg-[#1E2422] text-[#19D879] border border-[#19D879]/40 shadow-sm"
               : "text-zinc-400 hover:text-white"
@@ -203,13 +208,14 @@ export const InteractiveDemonstrations: React.FC = () => {
       {activeTab === "rag" && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="p-4 sm:p-6 rounded-2xl bg-[#111413] border border-[#273430] space-y-4">
-            <label className="block text-xs font-mono uppercase text-zinc-400">
+            <label htmlFor="rag-query" className="block text-xs font-mono uppercase text-zinc-400">
               Simulate Query to Vector Store
             </label>
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="w-4 h-4 text-[#19D879] absolute left-3.5 top-3.5" />
                 <input
+                  id="rag-query"
                   type="text"
                   value={ragQuery}
                   onChange={(e) => setRagQuery(e.target.value)}
@@ -222,10 +228,13 @@ export const InteractiveDemonstrations: React.FC = () => {
                   setIsSearching(true);
                   setTimeout(() => setIsSearching(false), 300);
                 }}
-                className="px-5 py-2.5 bg-[#19D879] hover:bg-[#15b867] text-[#111413] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5"
+                disabled={isSearching}
+                aria-busy={isSearching}
+                className="min-h-11 px-5 py-2.5 bg-[#19D879] hover:bg-[#15b867] text-[#111413] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5"
+                type="button"
               >
                 <Cpu className="w-3.5 h-3.5" />
-                <span>Calculate Cosine Ranking</span>
+                <span>{isSearching ? "Ranking..." : "Calculate Cosine Ranking"}</span>
               </button>
             </div>
 
@@ -235,8 +244,9 @@ export const InteractiveDemonstrations: React.FC = () => {
               {sampleQueries.map((q, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => setRagQuery(q)}
-                  className="text-[11px] text-zinc-400 hover:text-[#19D879] bg-[#1E2422] px-2.5 py-1 rounded-lg border border-[#273430] transition-colors truncate max-w-xs"
+                  className="min-h-11 w-full sm:w-auto text-left text-[11px] text-zinc-400 hover:text-[#19D879] bg-[#1E2422] px-3 py-2 rounded-lg border border-[#273430] transition-colors sm:max-w-xs"
                 >
                   {q}
                 </button>
@@ -306,6 +316,7 @@ export const InteractiveDemonstrations: React.FC = () => {
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
+                type="button"
                 onClick={runAgentSimulation}
                 disabled={isAgentRunning}
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#19D879] hover:bg-[#15b867] disabled:opacity-50 text-[#111413] text-xs font-bold transition-all shadow-md shadow-[#19D879]/20"
@@ -314,15 +325,25 @@ export const InteractiveDemonstrations: React.FC = () => {
                 <span>{isAgentRunning ? "Running Steps..." : "Run Autonomous Loop"}</span>
               </button>
               <button
+                type="button"
                 onClick={() => setAgentStep(0)}
                 disabled={isAgentRunning}
                 className="p-2.5 text-zinc-400 hover:text-white rounded-xl bg-[#1E2422] border border-[#273430]"
+                aria-label="Reset agent simulation"
                 title="Reset simulation"
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
             </div>
           </div>
+
+          <p role="status" aria-live="polite" className="sr-only">
+            {isAgentRunning
+              ? `Step ${agentStep} of ${agentSteps.length}: ${agentSteps[agentStep - 1]?.title}`
+              : agentStep === agentSteps.length
+                ? "Agent simulation complete."
+                : "Agent simulation ready."}
+          </p>
 
           {/* Stepper Node Visualizer */}
           <div className="space-y-2">
@@ -332,6 +353,7 @@ export const InteractiveDemonstrations: React.FC = () => {
               return (
                 <div
                   key={s.step}
+                  aria-current={isActive ? "step" : undefined}
                   className={`p-4 rounded-xl border transition-all flex items-start gap-4 ${
                     isActive
                       ? "bg-[#1E2422] border-[#19D879] shadow-lg shadow-[#19D879]/10"
@@ -383,65 +405,69 @@ export const InteractiveDemonstrations: React.FC = () => {
               <div className="space-y-4 text-xs">
                 <div>
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-zinc-300">Daily Active Users:</span>
-                    <span className="font-mono text-[#19D879]">{dailyUsers.toLocaleString()}</span>
+                    <label htmlFor="daily-users" className="text-zinc-300">Daily Active Users:</label>
+                    <output htmlFor="daily-users" className="font-mono text-[#19D879]">{dailyUsers.toLocaleString()}</output>
                   </div>
                   <input
+                    id="daily-users"
                     type="range"
                     min="100"
                     max="20000"
                     step="100"
                     value={dailyUsers}
                     onChange={(e) => setDailyUsers(Number(e.target.value))}
-                    className="w-full accent-[#19D879]"
+                    className="min-h-11 w-full accent-[#19D879]"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-zinc-300">Queries / User / Day:</span>
-                    <span className="font-mono text-[#19D879]">{queriesPerUser}</span>
+                    <label htmlFor="queries-per-user" className="text-zinc-300">Queries / User / Day:</label>
+                    <output htmlFor="queries-per-user" className="font-mono text-[#19D879]">{queriesPerUser}</output>
                   </div>
                   <input
+                    id="queries-per-user"
                     type="range"
                     min="1"
                     max="25"
                     step="1"
                     value={queriesPerUser}
                     onChange={(e) => setQueriesPerUser(Number(e.target.value))}
-                    className="w-full accent-[#19D879]"
+                    className="min-h-11 w-full accent-[#19D879]"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-zinc-300">Avg Prompt Tokens / Query:</span>
-                    <span className="font-mono text-[#19D879]">{promptTokens}</span>
+                    <label htmlFor="prompt-tokens" className="text-zinc-300">Avg Prompt Tokens / Query:</label>
+                    <output htmlFor="prompt-tokens" className="font-mono text-[#19D879]">{promptTokens}</output>
                   </div>
                   <input
+                    id="prompt-tokens"
                     type="range"
                     min="200"
                     max="3000"
                     step="50"
                     value={promptTokens}
                     onChange={(e) => setPromptTokens(Number(e.target.value))}
-                    className="w-full accent-[#19D879]"
+                    className="min-h-11 w-full accent-[#19D879]"
                   />
                 </div>
 
                 <div>
                   <div className="flex justify-between mb-1.5">
-                    <span className="text-zinc-300">Avg Output Tokens / Query:</span>
-                    <span className="font-mono text-[#19D879]">{completionTokens}</span>
+                    <label htmlFor="completion-tokens" className="text-zinc-300">Avg Output Tokens / Query:</label>
+                    <output htmlFor="completion-tokens" className="font-mono text-[#19D879]">{completionTokens}</output>
                   </div>
                   <input
+                    id="completion-tokens"
                     type="range"
                     min="50"
                     max="1500"
                     step="25"
                     value={completionTokens}
                     onChange={(e) => setCompletionTokens(Number(e.target.value))}
-                    className="w-full accent-[#19D879]"
+                    className="min-h-11 w-full accent-[#19D879]"
                   />
                 </div>
               </div>

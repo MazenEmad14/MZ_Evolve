@@ -5,7 +5,7 @@ import { ArrowUpRight, Layers, Zap, RefreshCw } from "lucide-react";
 
 export const AboutIntroSection: React.FC = () => {
   return (
-    <section className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-subtle)] bg-[var(--bg-base)]">
+    <section data-nav-section="/about" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 border-t border-[var(--border-subtle)] bg-[var(--bg-base)]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Narrative */}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { servicesData } from "@/data/services";
 import { siteConfig } from "@/config/site";
@@ -14,8 +14,6 @@ import {
   Lock,
   Mail,
   Phone,
-  MessageSquare,
-  ArrowUpRight,
   Calendar,
 } from "lucide-react";
 import { WhatsAppIcon } from "../ui/WhatsAppIcon";
@@ -41,6 +39,7 @@ interface FormErrors {
 }
 
 export const ContactForm: React.FC = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState<FormState>({
     name: "",
     email: "",
@@ -56,20 +55,30 @@ export const ContactForm: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState<boolean>(false);
+  const [isSimulatedSubmission, setIsSimulatedSubmission] = useState(false);
   const [submittedInquiryId, setSubmittedInquiryId] = useState<string>("");
   const [deliveryNote, setDeliveryNote] = useState<string>("");
   const [serverError, setServerError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState(false);
-  const [formLoadTime, setFormLoadTime] = useState<number>(0);
+  const formLoadTime = useRef<number | null>(null);
 
   useEffect(() => {
-    setFormLoadTime(Date.now());
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const prefill = params.get("prefill");
-      if (prefill) {
-        setForm((prev) => ({ ...prev, projectDescription: decodeURIComponent(prefill) }));
-      }
+    formLoadTime.current = Date.now();
+    const params = new URLSearchParams(window.location.search);
+    const prefill = params.get("prefill");
+    const requestedService = params.get("service");
+    const serviceInterest = servicesData.find(
+      (service) => service.title === requestedService,
+    )?.title;
+    if (prefill || serviceInterest) {
+      const frame = window.requestAnimationFrame(() => {
+        setForm((prev) => ({
+          ...prev,
+          ...(prefill ? { projectDescription: prefill } : {}),
+          ...(serviceInterest ? { serviceInterest } : {}),
+        }));
+      });
+      return () => window.cancelAnimationFrame(frame);
     }
   }, []);
 
@@ -82,7 +91,7 @@ export const ContactForm: React.FC = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!form.email.trim() || !emailRegex.test(form.email.trim())) {
-      newErrors.email = "Please enter a valid business email address.";
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!form.serviceInterest) {
@@ -99,6 +108,13 @@ export const ContactForm: React.FC = () => {
     }
 
     setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      window.requestAnimationFrame(() => {
+        formRef.current
+          ?.querySelector<HTMLElement>('[aria-invalid="true"]')
+          ?.focus();
+      });
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -115,10 +131,11 @@ export const ContactForm: React.FC = () => {
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
+        signal: AbortSignal.timeout(15000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          timestamp: formLoadTime,
+          timestamp: formLoadTime.current ?? Date.now(),
         }),
       });
 
@@ -126,6 +143,7 @@ export const ContactForm: React.FC = () => {
 
       if (response.ok && data.success) {
         setSubmissionSuccess(true);
+        setIsSimulatedSubmission(data.deliveryStatus === "simulated_dev");
         setSubmittedInquiryId(data.inquiryId || `MZ-${Date.now().toString(36).toUpperCase()}`);
         setDeliveryNote(data.message || "Your inquiry has been received by our engineering team.");
       } else {
@@ -163,7 +181,7 @@ export const ContactForm: React.FC = () => {
 
         <div className="space-y-2">
           <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">
-            Inquiry Confirmed
+            {isSimulatedSubmission ? "Development Simulation" : "Inquiry Sent"}
           </h3>
           <p className="text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
             {deliveryNote}
@@ -192,7 +210,9 @@ export const ContactForm: React.FC = () => {
 
         <div className="pt-2 text-xs text-[var(--text-muted)] space-y-1">
           <p>
-            An MZEVOLVE team member will review your specifications and reply via email within 1–2 business days.
+            {isSimulatedSubmission
+              ? "This test was not emailed. Configure Resend to test real email delivery."
+              : "Your message has been sent to our team. An MZEVOLVE team member will review your specifications and reply via email within 1–2 business days."}
           </p>
           <p className="font-mono">
             Direct follow-ups:{" "}
@@ -250,10 +270,17 @@ export const ContactForm: React.FC = () => {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       noValidate
+      aria-busy={isSubmitting}
       className="p-6 sm:p-10 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-xl space-y-6"
     >
+      <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+        Start with the essentials. Timeline and budget are optional; we can
+        clarify those together.
+      </p>
+
       {/* Honeypot field for bot trap - invisible to real humans */}
       <div className="hidden" aria-hidden="true">
         <label htmlFor="_company_nickname">Do not fill this</label>
@@ -269,7 +296,7 @@ export const ContactForm: React.FC = () => {
       </div>
 
       {serverError && (
-        <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+        <div role="alert" className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
           <div className="flex items-start gap-3 text-xs sm:text-sm text-amber-300">
             <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-amber-400" />
             <span>{serverError}</span>
@@ -316,6 +343,9 @@ export const ContactForm: React.FC = () => {
             type="text"
             id="name"
             required
+            autoComplete="name"
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "name-error" : undefined}
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="e.g. Alex Vance"
@@ -324,7 +354,7 @@ export const ContactForm: React.FC = () => {
             }`}
           />
           {errors.name && (
-            <p className="text-xs text-red-400 mt-1">{errors.name}</p>
+            <p id="name-error" className="text-xs text-red-400 mt-1">{errors.name}</p>
           )}
         </div>
 
@@ -339,6 +369,9 @@ export const ContactForm: React.FC = () => {
             type="email"
             id="email"
             required
+            autoComplete="email"
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "email-error" : undefined}
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="alex@example.com"
@@ -347,7 +380,7 @@ export const ContactForm: React.FC = () => {
             }`}
           />
           {errors.email && (
-            <p className="text-xs text-red-400 mt-1">{errors.email}</p>
+            <p id="email-error" className="text-xs text-red-400 mt-1">{errors.email}</p>
           )}
         </div>
       </div>
@@ -364,6 +397,7 @@ export const ContactForm: React.FC = () => {
           <input
             type="text"
             id="company"
+            autoComplete="organization"
             value={form.company}
             onChange={(e) => setForm({ ...form, company: e.target.value })}
             placeholder="Company name"
@@ -381,6 +415,8 @@ export const ContactForm: React.FC = () => {
           <select
             id="serviceInterest"
             required
+            aria-invalid={Boolean(errors.serviceInterest)}
+            aria-describedby={errors.serviceInterest ? "service-interest-error" : undefined}
             value={form.serviceInterest}
             onChange={(e) => setForm({ ...form, serviceInterest: e.target.value })}
             className={`w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-elevated)] border text-[var(--text-primary)] text-sm transition-colors ${
@@ -398,7 +434,7 @@ export const ContactForm: React.FC = () => {
             </option>
           </select>
           {errors.serviceInterest && (
-            <p className="text-xs text-red-400 mt-1">{errors.serviceInterest}</p>
+            <p id="service-interest-error" className="text-xs text-red-400 mt-1">{errors.serviceInterest}</p>
           )}
         </div>
       </div>
@@ -460,7 +496,7 @@ export const ContactForm: React.FC = () => {
           >
             Project Goals & Description <span className="text-[#19D879]">*</span>
           </label>
-          <span className="text-xs font-mono text-[var(--text-muted)]">
+          <span aria-live="polite" className="text-xs font-mono text-[var(--text-muted)]">
             {form.projectDescription.length} chars (min 20)
           </span>
         </div>
@@ -468,6 +504,8 @@ export const ContactForm: React.FC = () => {
           id="projectDescription"
           rows={5}
           required
+          aria-invalid={Boolean(errors.projectDescription)}
+          aria-describedby={errors.projectDescription ? "project-description-error" : undefined}
           value={form.projectDescription}
           onChange={(e) => setForm({ ...form, projectDescription: e.target.value })}
           placeholder="Please describe your current systems, operational goals, or technical requirements..."
@@ -476,7 +514,7 @@ export const ContactForm: React.FC = () => {
           }`}
         />
         {errors.projectDescription && (
-          <p className="text-xs text-red-400 mt-1">{errors.projectDescription}</p>
+          <p id="project-description-error" className="text-xs text-red-400 mt-1">{errors.projectDescription}</p>
         )}
       </div>
 
@@ -484,9 +522,13 @@ export const ContactForm: React.FC = () => {
       <div className="pt-2">
         <label className="flex items-start gap-3 cursor-pointer select-none">
           <input
+            id="privacyConsent"
             type="checkbox"
+            required
             checked={form.privacyConsent}
             onChange={(e) => setForm({ ...form, privacyConsent: e.target.checked })}
+            aria-invalid={Boolean(errors.privacyConsent)}
+            aria-describedby={errors.privacyConsent ? "privacy-consent-error" : undefined}
             className="mt-1 w-4 h-4 rounded border-[var(--border-subtle)] text-[#19D879] focus:ring-[#19D879] bg-[var(--bg-surface-elevated)] cursor-pointer"
           />
           <span className="text-xs text-[var(--text-secondary)] leading-relaxed">
@@ -498,7 +540,7 @@ export const ContactForm: React.FC = () => {
           </span>
         </label>
         {errors.privacyConsent && (
-          <p className="text-xs text-red-400 mt-1.5">{errors.privacyConsent}</p>
+          <p id="privacy-consent-error" role="alert" className="text-xs text-red-400 mt-1.5">{errors.privacyConsent}</p>
         )}
       </div>
 

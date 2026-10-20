@@ -5,7 +5,7 @@ import { Check, Clock, ChevronRight } from "lucide-react";
 
 export const ProcessSection: React.FC = () => {
   return (
-    <section id="how-we-work" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
+    <section id="how-we-work" data-nav-section="/about" className="py-20 lg:py-28 px-4 sm:px-6 lg:px-8 bg-[var(--bg-base)] border-t border-[var(--border-subtle)]">
       <div className="max-w-7xl mx-auto">
         <SectionHeading
           badgeText="HOW WE WORK"
